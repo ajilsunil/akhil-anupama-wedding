@@ -31,7 +31,7 @@ export const wedding = Object.freeze({
     mapsUrl: 'https://maps.app.goo.gl/45b1RWQzbkS2QmEj6', // the groom's house
   }),
   hosts: Object.freeze({ label: 'With love & blessings', names: ['K.V Rajan', 'Raji P.', 'Amitharaj'] }),
-  shareText: 'Together with our families, we cordially invite you to the wedding of Akhil & Anupama on Sunday, 10 January 2027, 8:00 AM – 9:30 AM at Chettiyedath Mahavishnu Temple, Vaka, Thrissur. Reception on Sunday, 11 January 2027, 12 pm onwards at the groom’s residence, Ezhilode, Kannur.',
+  shareText: 'Together with our families, we cordially invite you to the wedding of Akhil & Anupama on Sunday, 10 January 2027, 8:00 AM – 9:30 AM at Chettiyedath Mahavishnu Temple, Vaka, Thrissur. Reception on Sunday, 11 January 2027, 12 pm onwards at the groom’s residence, Pezhumpara, Palakkad.',
 });
 
 
