@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=33219faa-b655-4079-9eda-d7e597748223
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Athulraj &amp; Aiswarya | Wedding Invitation</title>
+<meta name="description" content="Together with our families, we cordially invite you to the wedding of Athulraj &amp; Aiswarya on Sunday, 25 October 2026, at Chettiyedath Mahavishnu Temple, Vaka, Thrissur.">
+<!-- Share preview. og:image and og:url must be absolute: they name the production address; change
+     both if the invitation is served from another domain (the image is aa/og.jpg, made by tools/build-assets.mjs). -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_IN">
+<meta property="og:url" content="https://athulraj-weds-aiswarya.netlify.app/">
+<meta property="og:title" content="Athulraj &amp; Aiswarya | Wedding Invitation">
+<meta property="og:description" content="Together with our families, we cordially invite you to the wedding of Athulraj &amp; Aiswarya on Sunday, 25 October 2026, at Chettiyedath Mahavishnu Temple, Vaka, Thrissur, and to the reception on Sunday, 1 November 2026 at the groom&rsquo;s residence, Ezhilode, Kannur.">
+<meta property="og:image" content="https://athulraj-weds-aiswarya.netlify.app/og.jpg?v=4">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Athulraj and Aiswarya walking hand in hand in a garden, beside a gold double-A monogram and their names on deep green.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#10271F">
+<link rel="icon" href="data:,">
+<style>html{background:#10271F;scrollbar-gutter:stable}</style>
+<script>
+  // js: choreography available. motion / reduce-motion: which choreography. If main.js never
+  // arrives (blocked, old browser), the classes come off at load and the plain page shows.
+  // A tap on the first screen before main.js has arrived is remembered and replayed by init().
+  (function (h) {
+    var rm = false;
+    try { rm = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    h.className += rm ? ' js reduce-motion' : ' js motion';
+    // a classic desktop scrollbar's reserved gutter (0 on phones): the first screen centres its frame, monogram and
+    // label on the whole window rather than on the narrower page box (styles.css --gutter)
+    function gutter() { try { h.style.setProperty('--gutter', Math.max(0, Math.round(innerWidth - h.getBoundingClientRect().width)) + 'px'); } catch (e) {} }
+    gutter();
+    addEventListener('resize', gutter);
+    addEventListener('load', function () { if (!window.__aa) h.classList.remove('js', 'motion', 'reduce-motion'); });
+    document.addEventListener('click', function (e) { if (!window.__aa && e.target.closest && e.target.closest('[data-cover]')) window.__aaTap = 1; });
+
+    // Weak networks: the typefaces can still be on their way when the caption is due (1700 on the intro
+    // clock). Then the caption, date and label wait for them (fonts-wait pauses their animations before they
+    // start), at most until 3000, instead of re-setting in another face just after their entrance.
+    var fontsIn = rm || !document.fonts || !document.timeline || !h.getAnimations, holdAt = 0, held = 0;
+    function now() { return document.timeline.currentTime; }
+    function clock() { // since the intro began (the backdrop's CSS animation); -1 before the styles apply
+      var b = document.querySelector('.backdrop'), a = b && b.getAnimations()[0];
+      return a && a.startTime != null ? now() - a.startTime : -1;
+    }
+    function release() {
+      fontsIn = true;
+      if (holdAt) { held += now() - holdAt; holdAt = 0; h.classList.remove('fonts-wait'); }
+    }
+    // the font stylesheet has applied (ok) or failed: load the two faces the first screen uses
+    window.__aaFonts = function (ok) {
+      if (fontsIn) return;
+      if (!ok) return release();
+      try {
+        Promise.all([document.fonts.load('400 22px "Playfair Display"', 'Athulraj & Aiswarya'),
+          document.fonts.load('600 12px Manrope', '25 · 10 · 2026 OPEN THE INVITATION')]).then(release, release);
+      } catch (e) { release(); }
+    };
+    // the intro clock less the time the caption was held: main.js keeps the split date in step with it
+    window.__aaClock = function () {
+      try { var c = clock(); return c < 0 ? c : c - held - (holdAt ? now() - holdAt : 0); } catch (e) { return -1; }
+    };
+    (function watch() {
+      if (fontsIn) return;
+      var c = clock();
+      if (holdAt) { if (c >= 3000) return release(); }
+      else if (c >= 1750) return release(); // a busy main thread came back too late to hold: let it run
+      else if (c >= 1600) { holdAt = now(); h.classList.add('fonts-wait'); }
+      setTimeout(watch, c < 0 || holdAt ? 100 : Math.max(16, 1600 - c));
+    })();
+  })(document.documentElement);
+</script>
+<!-- J. the cover photograph is the first thing on screen: fetched first, at high priority. The srcset and sizes
+     match the <img> exactly, so the preload is the request the image uses. Phones take the 900 at every density
+     (256px x up to 3.5 is under 900w; it is drawn about 390px wide, so it is still 2.3x): the cover's budget on
+     a phone is about 90 KB. Large screens choose by their density: the photograph is about half a landscape
+     window, and the full width of a tablet held upright. -->
+<link rel="preload" as="image" href="photos/cover-900.webp" imagesrcset="photos/cover-900.webp 900w, photos/cover-1400.webp 1400w" imagesizes="(min-aspect-ratio: 5/4) and (min-height: 600px) 50vw, (min-width: 768px) and (min-height: 600px) 100vw, 256px" fetchpriority="high">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- the font stylesheet never blocks the first paint; display=swap covers the late font files, and the
+     head script holds the first screen's words for them on a weak network -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@600&amp;family=Playfair+Display:ital,wght@0,400;1,400&amp;display=swap" onload="this.onload=function(){window.__aaFonts&&__aaFonts(1)};this.rel='stylesheet'" onerror="window.__aaFonts&&__aaFonts(0)">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@600&amp;family=Playfair+Display:ital,wght@0,400;1,400&amp;display=swap"></noscript>
+<link rel="stylesheet" href="styles.css">
+<link rel="modulepreload" href="main.js">
+<link rel="modulepreload" href="src/data/wedding.js">
+<link rel="modulepreload" href="src/lib/wedding.mjs">
+<link rel="modulepreload" href="particles.js">
+<link rel="modulepreload" href="touch.js">
+<link rel="modulepreload" href="music.js">
+<script type="module" src="main.js"></script>
+</head>
+<body>
+
+<!-- Layering (back to front): backdrop (ground + vignette) 0, the cover photograph 0 (after it), dust canvas 1
+     (gold dust drifts over the photograph and behind the text), page 2, first screen 10, shockwave/bloom 20, touch rings 29 (touch.js),
+     effects canvas 30 (burst, shower and sparkles draw above everything). None of them takes pointer events. -->
+<div class="backdrop" aria-hidden="true"></div>
+<!-- J. the cover photograph: og.jpg's picture of the two of them walking hand in hand, as the first screen. It lies
+     under the gold dust and the first screen's frame and words; its own 20px placeholder (photos.json lqip) lies
+     under the <img>, blurred (.lqip: a bare 20px picture stretched 20 times shows blocks, not a blur), so from the
+     very first paint the box holds their picture (softly until the file is in, which then
+     cross-fades over it): never a blank box, never blocks and never a pop. With motion it rises out of the green (J3). -->
+<div class="cover-shot" data-cover-shot>
+  <div class="shot">
+    <i class="lqip" style="background-image: url('data:image/webp;base64,UklGRt4AAABXRUJQVlA4INIAAACQBQCdASoUABwAPwVusEuloyIUBVRbEETxgFcPNgOvUQa0rTMoc9u7pVPiO/rPWf0fZ5JkAAD+3ETb7qc4Gw2uEhUABw3lv5SILMvrQwi4kFcyNlV2w6OMCF6JDJiLpgMzLWgPbMLePhiwFZ/c02IaXDTEjVf0U0GmI7/+e7cAwXkeoroQvYqd7CbCOnrBxbLZ1iEUTs0qmi9/5/IudtA0XeX49Y0jEQXk3zjP8CEGtV/5Cb81fQd4fM3gbkzthHKE3INWYKh7KckpID0GJosAAAA=')"></i>
+    <img src="photos/cover-900.webp" srcset="photos/cover-900.webp 900w, photos/cover-1400.webp 1400w"
+         sizes="(min-aspect-ratio: 5/4) and (min-height: 600px) 50vw, (min-width: 768px) and (min-height: 600px) 100vw, 256px" width="900" height="1280"
+         alt="Athulraj and Aiswarya walking hand in hand in a garden, smiling at each other"
+         fetchpriority="high" decoding="async" onload="this.classList.add('is-loaded')" onerror="this.hidden=true">
+  </div>
+</div>
+<canvas class="dust-canvas" data-dust aria-hidden="true"></canvas>
+
+<header class="cover" data-cover>
+  <!-- H4.1 the card frame: a double hairline inset 18px, jewellery corners (a notch, two curls, a ◇).
+       Each ◇ and its curls draw first; once the ring has closed, the lines grow from each corner to meet at the midpoints. -->
+  <div class="card" aria-hidden="true">
+    <i class="cl t1"></i><i class="cl t2"></i><i class="cl b1"></i><i class="cl b2"></i>
+    <i class="cl l1"></i><i class="cl l2"></i><i class="cl r1"></i><i class="cl r2"></i>
+    <svg class="cn c-tl" viewBox="0 0 48 48" focusable="false"><path class="ln" pathLength="1" d="M0 .5H48"/><path class="ln" pathLength="1" d="M.5 0V48"/><path class="ln" pathLength="1" d="M11.16 11.16A8 8 0 0 0 13.5 5.5H48"/><path class="ln" pathLength="1" d="M11.16 11.16A8 8 0 0 1 5.5 13.5V48"/><g class="cg"><path class="cu" pathLength="1" d="M11.2 11.2C14.6 14.6 19.6 14.6 22 12C24.2 9.6 22.2 6.8 19.8 8C18 8.9 18.8 11.4 20.6 10.8"/><path class="cu" pathLength="1" d="M11.2 11.2C14.6 14.6 14.6 19.6 12 22C9.6 24.2 6.8 22.2 8 19.8C8.9 18 11.4 18.8 10.8 20.6"/><path class="dia" d="M18 15.2L20.8 18L18 20.8L15.2 18Z"/></g></svg>
+    <svg class="cn c-tr" viewBox="0 0 48 48" focusable="false"><path class="ln" pathLength="1" d="M0 .5H48"/><path class="ln" pathLength="1" d="M.5 0V48"/><path class="ln" pathLength="1" d="M11.16 11.16A8 8 0 0 0 13.5 5.5H48"/><path class="ln" pathLength="1" d="M11.16 11.16A8 8 0 0 1 5.5 13.5V48"/><g class="cg"><path class="cu" pathLength="1" d="M11.2 11.2C14.6 14.6 19.6 14.6 22 12C24.2 9.6 22.2 6.8 19.8 8C18 8.9 18.8 11.4 20.6 10.8"/><path class="cu" pathLength="1" d="M11.2 11.2C14.6 14.6 14.6 19.6 12 22C9.6 24.2 6.8 22.2 8 19.8C8.9 18 11.4 18.8 10.8 20.6"/><path class="dia" d="M18 15.2L20.8 18L18 20.8L15.2 18Z"/></g></svg>
+    <svg class="cn c-bl" viewBox="0 0 48 48" focusable="false"><path class="ln" pathLength="1" d="M0 .5H48"/><path class="ln" pathLength="1" d="M.5 0V48"/><path class="ln" pathLength="1" d="M11.16 11.16A8 8 0 0 0 13.5 5.5H48"/><path class="ln" pathLength="1" d="M11.16 11.16A8 8 0 0 1 5.5 13.5V48"/><g class="cg"><path class="cu" pathLength="1" d="M11.2 11.2C14.6 14.6 19.6 14.6 22 12C24.2 9.6 22.2 6.8 19.8 8C18 8.9 18.8 11.4 20.6 10.8"/><path class="cu" pathLength="1" d="M11.2 11.2C14.6 14.6 14.6 19.6 12 22C9.6 24.2 6.8 22.2 8 19.8C8.9 18 11.4 18.8 10.8 20.6"/><path class="dia" d="M18 15.2L20.8 18L18 20.8L15.2 18Z"/></g></svg>
+    <svg class="cn c-br" viewBox="0 0 48 48" focusable="false"><path class="ln" pathLength="1" d="M0 .5H48"/><path class="ln" pathLength="1" d="M.5 0V48"/><path class="ln" pathLength="1" d="M11.16 11.16A8 8 0 0 0 13.5 5.5H48"/><path class="ln" pathLength="1" d="M11.16 11.16A8 8 0 0 1 5.5 13.5V48"/><g class="cg"><path class="cu" pathLength="1" d="M11.2 11.2C14.6 14.6 19.6 14.6 22 12C24.2 9.6 22.2 6.8 19.8 8C18 8.9 18.8 11.4 20.6 10.8"/><path class="cu" pathLength="1" d="M11.2 11.2C14.6 14.6 14.6 19.6 12 22C9.6 24.2 6.8 22.2 8 19.8C8.9 18 11.4 18.8 10.8 20.6"/><path class="dia" d="M18 15.2L20.8 18L18 20.8L15.2 18Z"/></g></svg>
+  </div>
+  <div class="cover-inner">
+    <button class="mono-btn" type="button" data-open aria-label="Open the invitation" tabindex="-1">
+      <span class="mono-fly" data-mono>
+        <span class="mono-glow" aria-hidden="true"></span>
+        <span class="rays" aria-hidden="true"></span>
+        <span class="mono-ripple" aria-hidden="true"></span>
+        <span class="mono-pulse" aria-hidden="true"></span>
+        <span class="mono-tilt" data-tilt>
+          <!-- The monogram: two interlocked A's woven like a jeweller's hallmark inside one ring.
+               Every stroke is its own path (pathLength 1) so it can draw on; the foil gradient
+               carries the sheen. The masks cut the weave gaps. -->
+          <svg class="aa mono" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="aa-foil" gradientUnits="userSpaceOnUse" x1="-60" y1="-34" x2="60" y2="34" gradientTransform="translate(-40 -23)">
+                <stop offset="0" stop-color="#D6BC8A"/>
+                <stop offset=".34" stop-color="#D6BC8A"/>
+                <stop offset=".44" stop-color="#E5D0A3"/>
+                <stop offset=".5" stop-color="#F3E3BC"/>
+                <stop offset=".56" stop-color="#E5D0A3"/>
+                <stop offset=".66" stop-color="#D6BC8A"/>
+                <stop offset="1" stop-color="#D6BC8A"/>
+              </linearGradient>
+              <linearGradient id="aa-glint" gradientUnits="userSpaceOnUse" x1="-60" y1="-34" x2="60" y2="34" gradientTransform="translate(-40 -23)">
+                <stop offset=".34" stop-color="#F3E3BC" stop-opacity="0"/>
+                <stop offset=".5" stop-color="#F3E3BC" stop-opacity=".35"/>
+                <stop offset=".66" stop-color="#F3E3BC" stop-opacity="0"/>
+              </linearGradient>
+              <mask id="aa-under" maskUnits="userSpaceOnUse" x="0" y="0" width="240" height="240">
+                <rect width="240" height="240" fill="#fff"/>
+                <polygon points="94,54 134,184 127,184 90.4,66.3" fill="#000" stroke="#000" stroke-width="7" stroke-linejoin="round"/>
+              </mask>
+              <mask id="aa-bar" maskUnits="userSpaceOnUse" x="0" y="0" width="240" height="240">
+                <rect width="240" height="240" fill="#fff"/>
+                <polygon points="146,54 106,184 113,184 149.6,66.3" fill="#000" stroke="#000" stroke-width="7" stroke-linejoin="round"/>
+              </mask>
+              <mask id="aa-over" maskUnits="userSpaceOnUse" x="0" y="0" width="240" height="240">
+                <rect width="240" height="240" fill="#fff"/>
+                <rect x="106" y="124.5" width="13" height="7" fill="#000"/>
+              </mask>
+            </defs>
+            <path class="ring" pathLength="1" d="M120 10A110 110 0 0 1 120 230A110 110 0 0 1 120 10"/>
+            <g class="letters" transform="translate(120 116) scale(.86) translate(-120 -119)">
+              <g mask="url(#aa-under)">
+                <path class="st st5" pathLength="1" d="M146 54L106 184H113L149.6 66.3Z"/>
+                <path class="st st6" pathLength="1" d="M146 54L186 184"/>
+              </g>
+              <path class="st st3" pathLength="1" mask="url(#aa-bar)" d="M71.2 128H168.8"/>
+              <path class="st st2" pathLength="1" mask="url(#aa-over)" d="M94 54L134 184H127L90.4 66.3Z"/>
+              <path class="st st1" pathLength="1" d="M94 54L54 184"/>
+              <path class="st st4" pathLength="1" d="M48 184H60M123 184H138"/>
+              <path class="st st7" pathLength="1" d="M102 184H117M180 184H192"/>
+            </g>
+          </svg>
+          <span class="mono-tip" aria-hidden="true"><i></i></span>
+        </span>
+      </span>
+    </button>
+    <div class="caption" data-caption>
+      <p class="pair">Athulraj <span class="gold">&amp;</span> Aiswarya</p>
+      <p class="label date" data-split="chars">25 · 10 · 2026</p>
+      <!-- I2.1 both dates land in the first second -->
+      <p class="label dates">Wedding 25 Oct <span class="gold">·</span> Reception 1 Nov</p>
+    </div>
+  </div>
+  <!-- L1. the way in: a hairline gold pill under the words, its glow breathing. The whole cover still opens on a tap,
+       and a swipe up, a scroll down or the down arrow open it too (main.js). It is the cover's one tab stop. -->
+  <button class="cta" type="button" data-tap><span class="cta-glow" aria-hidden="true"></span><span class="cta-label">Open the invitation</span></button>
+</header>
+
+<div class="flash" aria-hidden="true">
+  <span class="bloom" data-bloom></span>
+  <span class="shock" data-shock></span>
+  <span class="shock" data-shock></span>
+</div>
+
+<!-- K. background music (music.js): the toggle, in the top-right safe area. It stays hidden unless music.js finds a
+     track this browser can play, and fades in only once the invitation has opened (the music itself starts with the
+     guest's tap on the cover). aria-pressed is true while the music is on. No JavaScript: no player, no toggle. -->
+<button class="sound" type="button" data-sound aria-pressed="false" aria-label="Background music" hidden>
+  <svg viewBox="0 0 44 44" aria-hidden="true" focusable="false"><circle class="snd-disc" cx="22" cy="22" r="19.5"/><circle class="snd-ring" pathLength="1" cx="22" cy="22" r="19.5"/><path class="snd-mute" pathLength="1" d="M15.5 15.5L28.5 28.5"/></svg>
+  <span class="snd-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+</button>
+
+<!-- L5. page dots: three tiny gold marks at the right edge, the current page's longer and brighter. Each glides to its
+     page. main.js unhides them; they show only once the invitation has opened. -->
+<nav class="dots" data-dots aria-label="Pages" hidden>
+  <button class="pdot" type="button" data-dot="invitation" aria-label="Go to: Wedding" aria-current="true"><i></i></button>
+  <button class="pdot" type="button" data-dot="reception" aria-label="Go to: Reception"><i></i></button>
+  <button class="pdot" type="button" data-dot="blessings" aria-label="Go to: With love"><i></i></button>
+</nav>
+
+<main class="page">
+  <section class="invitation" data-section="invitation" aria-labelledby="names">
+    <div class="slot" data-slot aria-hidden="true"></div>
+    <p class="label families" data-split="center">Together with our families</p>
+    <p class="body invite rv-blur">we cordially invite you<br>to the wedding of</p>
+    <h1 class="names" id="names" tabindex="-1" data-head>
+      <span class="name wipe" data-light="Athulraj"><span class="gold">A</span>thulraj</span>
+      <span class="weds"> weds </span>
+      <span class="name wipe" data-light="Aiswarya"><span class="gold">A</span>iswarya</span>
+    </h1>
+    <div class="rule"><i></i></div>
+    <div class="when">
+      <p class="sub rv">Sunday, 25 October 2026</p>
+      <p class="body rv">8:00 AM – 9:30 AM</p>
+    </div>
+    <div class="hair"></div>
+    <div class="where">
+      <p class="sub rv">Chettiyedath<br>Mahavishnu Temple</p>
+      <p class="body rv">Vaka, Thrissur</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn-draw" data-directions href="https://maps.app.goo.gl/LpzQTTtj5mBWZDhf8" target="_blank" rel="noopener">
+        <span class="btn-label">Directions</span><span class="btn-sheen" aria-hidden="true"></span>
+      </a>
+      <a class="btn btn-draw" data-save href="Athulraj-and-Aiswarya-Wedding.ics" download="Athulraj-and-Aiswarya-Wedding.ics">
+        <span class="btn-label">Save the date</span>
+        <svg class="btn-check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path pathLength="1" d="M5 12.5l4.6 4.6L19 7.5"/></svg>
+        <span class="btn-sheen" aria-hidden="true"></span>
+      </a>
+    </div>
+    <!-- the Save the date status takes the link's place for a few seconds (a cross-fade), so nothing below it moves -->
+    <div class="gcal-slot" data-gcal-slot>
+      <a class="gcal rv" data-gcal href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Athulraj+%26+Aiswarya%27s+Wedding&amp;dates=20261025T023000Z%2F20261025T040000Z&amp;details=Together+with+our+families%2C+we+cordially+invite+you+to+the+wedding+of+Athulraj+%26+Aiswarya.%0AWedding+time%3A+8%3A00+AM+%E2%80%93+9%3A30+AM+%28India+Standard+Time%29.&amp;location=Chettiyedath+Mahavishnu+Temple%2C+Vaka%2C+Thrissur" target="_blank" rel="noopener">Add to Google Calendar</a>
+      <p class="status" role="status" data-save-status></p>
+    </div>
+    <!-- I2.2 one quiet line down to the reception (the screen he most wants read) -->
+    <a class="jump rv" data-jump href="#reception-title">Reception on 1 November<svg class="jump-arrow" viewBox="0 0 12 15" aria-hidden="true" focusable="false"><path d="M6 1.5V12.4M1.8 8.4L6 12.9L10.2 8.4"/></svg></a>
+    <!-- L3. the labelled next prompt: one tap target, the gold label over the bobbing circle -->
+    <button class="next" type="button" data-next aria-label="Next: Reception">
+      <span class="next-label" aria-hidden="true">Next <span class="gold-dot">·</span> Reception</span>
+      <svg viewBox="0 0 44 44" aria-hidden="true" focusable="false"><circle pathLength="1" cx="22" cy="22" r="21.5"/><path d="M15 18.5L22 25.5L29 18.5"/></svg>
+    </button>
+  </section>
+
+  <section class="reception" data-section="reception" aria-labelledby="reception-title">
+    <div class="panel" data-panel>
+      <!-- I2.3 the groom's house, inside the gold frame under a strong scrim. The src names are the contract with
+           tools/build-photos.mjs; main.js re-points them from photos/photos.json if it names other files, and a
+           missing file simply hides the <img> (the frame, the scrim tone and the layout stay). -->
+      <div class="ph ph-bg" data-ph="reception">
+        <img src="photos/reception-900.webp"
+             srcset="photos/reception-900.webp 900w, photos/reception-1400.webp 1400w"
+             sizes="(min-width: 768px) 440px, 100vw" width="900" height="1440"
+             alt="Athulraj and Aiswarya hand in hand on the veranda of his family home"
+             decoding="async" loading="lazy" onerror="this.hidden=true">
+      </div>
+      <svg class="frame" aria-hidden="true" focusable="false"><path class="edge" pathLength="1" d=""/><path class="edge" pathLength="1" d=""/><path class="run run-a" pathLength="1" d=""/><path class="run run-b" pathLength="1" d=""/><path class="run" pathLength="1" d=""/></svg>
+      <span class="halo" aria-hidden="true"></span>
+      <svg class="orn clasp" viewBox="0 0 120 18" aria-hidden="true" focusable="false"><path class="bud" pathLength="1" d="M60 16C57.4 15 55.8 12.8 55.8 10.2C55.8 7.4 57.4 4.4 60 1.5"/><path class="bud" pathLength="1" d="M60 16C62.6 15 64.2 12.8 64.2 10.2C64.2 7.4 62.6 4.4 60 1.5"/><path class="petal" pathLength="1" d="M58.4 15.8C54.2 15.4 51 12.6 50.6 8.2C53.2 8.8 55.2 10.2 56.2 12"/><path class="petal" pathLength="1" d="M61.6 15.8C65.8 15.4 69 12.6 69.4 8.2C66.8 8.8 64.8 10.2 63.8 12"/><path class="scroll" pathLength="1" d="M57 16C50 16.6 45 15.2 39 13C32 10.4 26 10.6 22.6 13C20 14.8 20.8 18 23.6 17.6C25.8 17.2 25.8 14.4 23.8 14.6"/><path class="scroll" pathLength="1" d="M63 16C70 16.6 75 15.2 81 13C88 10.4 94 10.6 97.4 13C100 14.8 99.2 18 96.4 17.6C94.2 17.2 94.2 14.4 96.2 14.6"/><circle class="dot" cx="14" cy="12.6" r=".9"/><circle class="dot" cx="106" cy="12.6" r=".9"/></svg>
+      <span class="glint g1" aria-hidden="true"></span><span class="glint g2" aria-hidden="true"></span>
+      <span class="glint g3" aria-hidden="true"></span><span class="glint g4" aria-hidden="true"></span>
+      <p class="body rv also">You are also invited to the</p>
+      <h2 class="title wipe" id="reception-title" tabindex="-1" data-head data-light="Reception">Reception</h2>
+      <div class="rule"><i></i></div>
+      <!-- I1/I2.3 the clear window in the scrim: the one place on the page where the couple is
+           simply looked at, with no words over them. It is an empty box in the panel's flow and
+           it paints the whole scrim itself, outwards from its own two edges (styles.css .ph-win). -->
+      <div class="ph-win" aria-hidden="true"></div>
+      <div class="when">
+        <p class="sub rv">Sunday, 1 November 2026</p>
+        <p class="body rv">11 AM onwards</p>
+      </div>
+      <div class="hair"></div>
+      <div class="where">
+        <p class="sub rv">Groom’s residence</p>
+        <p class="body rv">Ezhilode, Kannur</p>
+      </div>
+      <!-- the primary action of the whole invitation: solid gold -->
+      <div class="actions actions-rcp">
+        <a class="btn btn-solid rv" data-reception-directions href="https://www.google.com/maps/search/?api=1&amp;query=12.087500%2C75.254201" target="_blank" rel="noopener">
+          <span class="btn-label">Directions</span><span class="btn-sheen" aria-hidden="true"></span>
+        </a>
+      </div>
+      <a class="gcal rv" data-gcal-reception href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Athulraj+%26+Aiswarya%27s+Wedding+Reception&amp;dates=20261101T053000Z%2F20261101T083000Z&amp;details=Wedding+reception+of+Athulraj+%26+Aiswarya.%0A11+am+onwards+%28India+Standard+Time%29.&amp;location=Groom%E2%80%99s+residence%2C+Ezhilode%2C+Kannur" target="_blank" rel="noopener">Add the reception to Google Calendar</a>
+      <!-- one live line to whichever event is next (main.js fills and unhides it; days, and hours inside the last day) -->
+      <p class="count-line rv" data-count hidden></p>
+    </div>
+    <button class="next" type="button" data-next aria-label="Next: With love and blessings">
+      <span class="next-label" aria-hidden="true">Next <span class="gold-dot">·</span> With love</span>
+      <svg viewBox="0 0 44 44" aria-hidden="true" focusable="false"><circle pathLength="1" cx="22" cy="22" r="21.5"/><path d="M15 18.5L22 25.5L29 18.5"/></svg>
+    </button>
+  </section>
+
+  <section class="blessings" data-section="blessings" aria-label="With love and blessings">
+    <!-- I2.4 the garden swing, faint and darkened, under the whole closing screen -->
+    <div class="bk" data-ph="backdrop" aria-hidden="true">
+      <img src="photos/closing-backdrop-900.webp" width="900" height="1600" alt="" decoding="async" loading="lazy" onerror="this.hidden=true">
+    </div>
+    <!-- the arched portrait takes the lotus filigree's place above the label: the ◇ sits where the arch peaks -->
+    <div class="ph ph-portrait" data-ph="portrait">
+      <span class="ph-crop"><img src="photos/closing-700.webp"
+           srcset="photos/closing-700.webp 700w, photos/closing-1100.webp 1100w"
+           sizes="(min-width: 768px) 230px, 52vw" width="700" height="875"
+           alt="Athulraj and Aiswarya close together, her hand resting on his chest"
+           decoding="async" loading="lazy" onerror="this.hidden=true"></span>
+      <svg class="ph-arch" data-arch aria-hidden="true" focusable="false"><path class="edge" pathLength="1" d=""/></svg>
+      <span class="ph-gem" aria-hidden="true"></span>
+    </div>
+    <p class="label" id="bless-label" tabindex="-1" data-head data-split="chars">With love &amp; blessings</p>
+    <p class="body hosts"><span class="host">K.V Rajan</span> <span class="gold dot">·</span> <span class="host">Raji P.</span> <span class="gold dot">·</span> <span class="host">Amitharaj</span></p>
+    <p class="sub closing" data-split="words">Your presence<br>is our greatest joy.</p>
+    <div class="actions actions-bless">
+      <button class="btn btn-solid rv" type="button" data-shower>
+        <span class="btn-label">Shower blessings</span><span class="btn-label btn-alt" aria-hidden="true">Blessings sent</span>
+        <span class="btn-sheen" aria-hidden="true"></span>
+      </button>
+      <button class="btn btn-line rv" type="button" data-share>
+        <span class="btn-label">Share invitation</span><span class="btn-sheen" aria-hidden="true"></span>
+      </button>
+    </div>
+    <p class="status" role="status" data-bless-status></p>
+    <input class="share-link" data-share-link type="text" readonly hidden aria-label="Invitation link">
+    <footer class="foot">
+      <svg class="aa foot-mono rv" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
+        <path class="ring" d="M120 10A110 110 0 0 1 120 230A110 110 0 0 1 120 10"/>
+        <g class="letters" transform="translate(120 116) scale(.86) translate(-120 -119)">
+          <g mask="url(#aa-under)"><path d="M146 54L106 184H113L149.6 66.3Z"/><path d="M146 54L186 184"/></g>
+          <path mask="url(#aa-bar)" d="M71.2 128H168.8"/>
+          <path mask="url(#aa-over)" d="M94 54L134 184H127L90.4 66.3Z"/>
+          <path d="M94 54L54 184M48 184H60M123 184H138M102 184H117M180 184H192"/>
+        </g>
+      </svg>
+      <p class="label foot-date rv">25 · 10 · 2026</p>
+    </footer>
+  </section>
+</main>
+<!-- H4.7 the kasavu edge: a woven 3px gold band and a hairline, like the border of a set-mundu -->
+<div class="kasavu" data-kasavu aria-hidden="true"><i></i><i></i></div>
+
+<canvas class="fx-canvas" data-fx aria-hidden="true"></canvas>
+</body>
+</html>

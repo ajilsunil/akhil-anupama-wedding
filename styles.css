@@ -1,0 +1,1215 @@
+/* A & A: the green invitation. Look from mockup-reference.html; motion per DESIGN.md.
+   Pre-reveal states live only under html.motion (set by the head script), so the page without
+   JavaScript, or with reduced motion, shows everything. */
+
+@property --sw { syntax: '<number>'; inherits: true; initial-value: 1.15; }
+@property --tip { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+/* the light-wipe front: a feathered mask edge on the names, and the soft band that rides it */
+@property --p { syntax: '<length-percentage>'; inherits: true; initial-value: 0%; }
+
+:root {
+  --ground: #10271F;
+  --deep: #0B1D17;
+  --lift: #1D4234;
+  --gold: #D6BC8A;
+  --bright: #F3E3BC;
+  --ivory: #F1EBDD;
+  --serif: 'Playfair Display', 'Times New Roman', Georgia, serif;
+  --sans: 'Manrope', 'Segoe UI', system-ui, sans-serif;
+  --ease: cubic-bezier(.22, .61, .36, 1);
+  --travel: cubic-bezier(.7, 0, .2, 1);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+/* the gutter is reserved while the scroll is locked, so a classic desktop scrollbar appearing at the
+   landing does not shift the page under the monogram */
+html { background: var(--ground); scrollbar-gutter: stable; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--ground);
+  color: var(--ivory);
+  font-family: var(--serif);
+  font-weight: 400;
+  text-align: center;
+  font-variant-numeric: lining-nums;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+p, h1, h2 { margin: 0; font-weight: 400; }
+.gold { color: var(--gold); }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* type scale: 12 / 17 / 22 / 40-52 */
+.label {
+  font-family: var(--sans); font-weight: 600; font-size: 12px; line-height: 16px;
+  letter-spacing: .26em; text-transform: uppercase; color: var(--gold);
+  padding-left: .26em; /* balance the trailing tracking on the axis */
+}
+.body { font-size: 17px; line-height: 26px; }
+.sub { font-size: 22px; line-height: 30px; }
+
+/* ---------- stage layers ---------- */
+.backdrop {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(130% 95% at 50% 40%, rgba(11, 29, 23, 0) 42%, rgba(11, 29, 23, .62) 100%);
+}
+.backdrop::before { content: ''; position: absolute; inset: 0; background: var(--deep); opacity: 0; }
+.dust-canvas, .fx-canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; display: block; }
+.dust-canvas { z-index: 1; }
+.fx-canvas { z-index: 30; }
+html:not(.js) .dust-canvas, html:not(.js) .fx-canvas, html:not(.js) .flash { display: none; }
+
+/* ---------- 1. first screen ---------- */
+.cover {
+  position: relative; z-index: 10;
+  min-height: 100vh; min-height: 100svh;
+  padding: calc(40px + env(safe-area-inset-top)) 28px calc(80px + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  overflow: hidden;
+  --sw: 1.6; /* a 1px hairline at the cover's 160px ring */
+}
+/* J. the photograph stands in the upper part of the screen; the monogram and the words sit under it, on the green.
+   --ring is the monogram, --foot the air under the words (where "Tap to open" sits). The photograph's fade and
+   width are worked out from the same two numbers (.cover-shot), so the words always land on plain green. */
+.cover, .cover-shot { --ring: min(160px, 20svh); --foot: clamp(112px, 15svh, 150px); --wf: 70px; }
+@supports not (height: 1svh) { .cover, .cover-shot { --ring: min(160px, 20vh); --foot: clamp(112px, 15vh, 150px); } }
+.cover { padding-bottom: calc(var(--foot) + env(safe-area-inset-bottom)); }
+/* without JS the first screen is simply the top of the page (its card frame drawn round it), the photograph
+   lying behind it as it does on the cover */
+html:not(.js) .cover { padding-top: calc(68px + env(safe-area-inset-top)); }
+html.js .cover { position: fixed; inset: 0; min-height: 0; overflow: hidden; cursor: pointer; touch-action: manipulation; }
+html.js.is-open .cover { pointer-events: none; }
+/* a classic desktop scrollbar's gutter (reserved while the scroll is locked; --gutter from the head script, 0 on
+   phones) cannot be painted over by the fixed first screen: its frame, monogram and label are centred on the whole
+   window instead of the narrower box, and the gutter takes the vignette's edge tone rather than a lighter seam */
+html.js .cover { padding-left: calc(28px + var(--gutter, 0px)); }
+@media (hover: hover) and (pointer: fine) { html.js:not(.is-landed) { background-color: #0E251D; } }
+/* the first screen's own deeper vignette, which dissolves into the page during the flight */
+html.js .cover::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(120% 80% at 50% 42%, rgba(11, 29, 23, 0) 38%, rgba(11, 29, 23, .5) 100%);
+}
+html.motion.is-open .cover::before { animation: fadeOut 900ms var(--ease) 350ms both; }
+html.js .cover[hidden] { display: none !important; }
+.cover-inner { display: flex; flex-direction: column; align-items: center; }
+
+/* H4.1 the card frame: two hairlines 5px apart, inset 18px; each half-side grows from its corner */
+.card {
+  --inset: 18px;
+  position: absolute; pointer-events: none;
+  top: calc(var(--inset) + env(safe-area-inset-top)); right: calc(var(--inset) + env(safe-area-inset-right));
+  bottom: calc(var(--inset) + env(safe-area-inset-bottom)); left: calc(var(--inset) + env(safe-area-inset-left));
+}
+html.js .card { right: calc(var(--inset) + env(safe-area-inset-right) - var(--gutter, 0px)); }
+.card .cl { position: absolute; border: 0 solid var(--gold); }
+.cl.t1, .cl.t2, .cl.b1, .cl.b2 { height: 6px; border-width: 1px 0; }
+.cl.t1, .cl.t2 { top: 0; } .cl.b1, .cl.b2 { bottom: 0; }
+.cl.t1, .cl.b1 { left: 48px; right: 50%; transform-origin: 0 50%; }
+.cl.t2, .cl.b2 { left: 50%; right: 48px; transform-origin: 100% 50%; }
+.cl.l1, .cl.l2, .cl.r1, .cl.r2 { width: 6px; border-width: 0 1px; }
+.cl.l1, .cl.l2 { left: 0; } .cl.r1, .cl.r2 { right: 0; }
+.cl.l1, .cl.r1 { top: 48px; bottom: 50%; transform-origin: 50% 0; }
+.cl.l2, .cl.r2 { top: 50%; bottom: 48px; transform-origin: 50% 100%; }
+.cn { position: absolute; width: 48px; height: 48px; overflow: visible; fill: none; stroke: var(--gold); stroke-width: 1; }
+/* round joins: the notch's arc flows into its straight line with no square spur at the cusp */
+.cn .ln { stroke-linejoin: round; }
+.cn .cu { stroke-linecap: round; }
+.cn .dia { fill: var(--gold); stroke: none; transform-box: fill-box; transform-origin: 50% 50%; }
+.c-tl { left: 0; top: 0; } .c-tr { right: 0; top: 0; transform: scaleX(-1); }
+.c-bl { left: 0; bottom: 0; transform: scaleY(-1); } .c-br { right: 0; bottom: 0; transform: scale(-1); }
+/* a large frame: set further in, and the curls and ◇ half as large again (grown from the notch, still hairline),
+   so they don't vanish on a 1400px frame; the double line keeps its 1px strokes 5px apart (not on a phone held sideways) */
+@media (min-width: 768px) and (min-height: 600px) {
+  .card { --inset: 28px; }
+  .cn .cg { transform: translate(11.16px, 11.16px) scale(1.5) translate(-11.16px, -11.16px); }
+  .cn .cu { stroke-width: .667; }
+}
+
+/* H4.2 light rays: sixteen soft gold rays leaving the ring, faded by a radial mask; they sway, never spin */
+.rays { position: absolute; inset: -50%; pointer-events: none; --r0: 42%; --m: 1; }
+.rays::before {
+  content: ''; position: absolute; inset: 0; border-radius: 50%; opacity: .07;
+  background: repeating-conic-gradient(from -4deg, rgba(214, 188, 138, .6) 0deg, rgba(214, 188, 138, .36) 3deg, rgba(214, 188, 138, .1) 6.5deg, rgba(214, 188, 138, 0) 9deg 13.5deg, rgba(214, 188, 138, .1) 16deg, rgba(214, 188, 138, .36) 19.5deg, rgba(214, 188, 138, .6) 22.5deg);
+  -webkit-mask-image: radial-gradient(closest-side, transparent var(--r0), rgba(0, 0, 0, var(--m)) calc(var(--r0) + 12%), rgba(0, 0, 0, calc(var(--m) * .4)) 70%, rgba(0, 0, 0, calc(var(--m) * .1)) 86%, transparent 100%);
+  mask-image: radial-gradient(closest-side, transparent var(--r0), rgba(0, 0, 0, var(--m)) calc(var(--r0) + 12%), rgba(0, 0, 0, calc(var(--m) * .4)) 70%, rgba(0, 0, 0, calc(var(--m) * .1)) 86%, transparent 100%);
+}
+/* round the small monogram the rays sit closer together, so each is fainter */
+.slot .rays { inset: -120%; --r0: 24%; --m: .6; }
+/* the first screen's rays are long hairline beams with wide dark gaps, starting just outside the ring and fading
+   out towards the frame (fat wedges there read as a stained halo on phones and a badge on desktop) */
+.cover .rays { inset: -90%; }
+.cover .rays::before {
+  opacity: .05;
+  background: repeating-conic-gradient(from -1.25deg, rgba(214, 188, 138, .6) 0deg, rgba(214, 188, 138, 0) 2.5deg 20deg, rgba(214, 188, 138, .6) 22.5deg);
+  -webkit-mask-image: radial-gradient(closest-side, transparent 46%, #000 52%, transparent 100%);
+  mask-image: radial-gradient(closest-side, transparent 46%, #000 52%, transparent 100%);
+}
+/* text paints above the monogram's glow (which is positioned inside the button) */
+.caption { position: relative; z-index: 1; }
+
+.mono-btn {
+  position: relative; display: block; flex: none;
+  width: var(--ring); height: var(--ring);
+  margin: 0; padding: 0; border: 0; border-radius: 50%;
+  background: none; color: inherit; font: inherit; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.mono-btn:focus { outline: none; }
+.mono-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 10px; }
+.mono-fly { position: absolute; inset: 0; display: block; transform-origin: 50% 50%; }
+/* the element fades (flight, landing); its ::before carries the light and the breathing */
+.mono-glow { position: absolute; inset: -62.5%; border-radius: 50%; pointer-events: none; }
+.mono-glow::before {
+  content: ''; position: absolute; inset: 0; border-radius: inherit;
+  /* a smooth (1 - r)^1.2 falloff: no kink in the ramp, so no contour rings on 8-bit screens */
+  background: radial-gradient(closest-side, rgb(29, 66, 52) 0, rgba(29, 66, 52, .88) 10%, rgba(29, 66, 52, .765) 20%,
+    rgba(29, 66, 52, .652) 30%, rgba(29, 66, 52, .542) 40%, rgba(29, 66, 52, .415) 52%, rgba(29, 66, 52, .293) 64%,
+    rgba(29, 66, 52, .18) 76%, rgba(29, 66, 52, .079) 88%, rgba(29, 66, 52, 0) 100%);
+}
+.mono-ripple { position: absolute; inset: 4.17%; border-radius: 50%; border: 1px solid var(--gold); opacity: 0; pointer-events: none; }
+.mono-tilt { position: absolute; inset: 0; display: block; }
+.aa { display: block; overflow: visible; fill: none; stroke: var(--gold); stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 6; }
+.aa .ring { stroke-width: var(--sw); }
+.aa .letters { stroke-width: calc(var(--sw) / .86); }
+.mono { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mono .ring { transform-box: view-box; transform-origin: 120px 120px; }
+.mono.is-drawn .ring, .mono.is-drawn .st { stroke: url(#aa-foil) var(--gold); }
+.mono.is-lit .ring, .mono.is-lit .st { stroke: var(--bright); }
+/* glint layer (cloned strokes, drawn wider in a translucent bright band) so the sheen reads on hairlines */
+.mono .mono-glint { stroke: url(#aa-glint) transparent; stroke-width: calc(var(--sw) * 1.8); }
+.mono .mono-glint g { stroke-width: calc(var(--sw) / .86 * 1.8); }
+.mono-tip { position: absolute; inset: 0; opacity: 0; pointer-events: none; transform: rotate(var(--tip)); }
+.mono-tip i {
+  position: absolute; left: 50%; top: 4.17%; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%;
+  background: radial-gradient(circle, var(--bright) 0 14%, rgba(243, 227, 188, .6) 30%, rgba(214, 188, 138, 0) 70%);
+}
+
+.pair { font-size: 22px; line-height: 30px; margin-top: 24px; letter-spacing: .02em; }
+.cover .date { margin-top: 14px; }
+/* I2.1 both dates in the first second: one quiet gold line, on one line down to 320px wide */
+.dates {
+  margin-top: 12px; font-size: 10.5px; line-height: 14px; letter-spacing: .1em; padding-left: .1em;
+  color: rgba(214, 188, 138, .78);
+}
+.dates .gold { opacity: .7; }
+@media (max-width: 349px) { .dates { font-size: 10px; letter-spacing: .06em; padding-left: .06em; } }
+/* L1. the way in: a hairline gold pill in the air under the words (--foot), 48px tall, its soft glow breathing. Its
+   bottom edge stays at least 36px above the screen's (13px clear of the frame's inner line), plus the safe area,
+   and at 360 wide it sits between the frame's bottom corners. The whole cover still opens on a tap. */
+.cta {
+  position: absolute; left: 0; right: 0; margin: 0 auto;
+  bottom: calc(max(36px, (var(--foot) - 48px) / 2) + env(safe-area-inset-bottom));
+  display: grid; place-items: center; width: max-content; height: 48px; padding: 0 24px 0 calc(24px + .2em);
+  border: 1px solid var(--gold); border-radius: 24px; background: rgba(11, 29, 23, .4);
+  color: var(--gold); font: 600 11px/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; white-space: nowrap;
+  cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.cta > * { grid-area: 1 / 1; }
+.cta-label { position: relative; }
+.cta-glow, .cta::after { content: ''; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none; }
+.cta-glow { box-shadow: 0 0 18px 1px rgba(214, 188, 138, .3), inset 0 0 12px rgba(214, 188, 138, .14); opacity: .75; }
+/* the idle pulse: a brighter ring of light, struck once every 3s while the cover sits untouched (main.js .is-idle) */
+.cta::after { box-shadow: 0 0 28px 5px rgba(243, 227, 188, .4), inset 0 0 16px rgba(243, 227, 188, .22); opacity: 0; }
+.cta:focus { outline: none; }
+.cta:focus-visible { outline: 2px solid var(--ivory); outline-offset: 4px; }
+@media (hover: hover) { .cta:hover .cta-glow { opacity: 1; } }
+html.js .cta { left: var(--gutter, 0px); }
+html:not(.js) .cta { display: none; }
+@media (max-width: 349px) { .cta { font-size: 10.5px; letter-spacing: .18em; padding: 0 18px 0 calc(18px + .18em); } }
+/* the same pulse round the monogram's ring */
+.mono-pulse {
+  position: absolute; inset: 4.17%; border-radius: 50%; opacity: 0; pointer-events: none;
+  box-shadow: 0 0 22px 3px rgba(243, 227, 188, .34), inset 0 0 18px 2px rgba(243, 227, 188, .2);
+}
+/* short screens: the words under the monogram sit a little closer, so the larger foot costs the photograph nothing */
+@media (max-height: 700px) {
+  .cover, .cover-shot { --wf: 58px; }
+  .pair { margin-top: 18px; }
+  .cover .date { margin-top: 10px; }
+  .dates { margin-top: 10px; }
+}
+
+/* ---------- J. the cover photograph (version 5): og.jpg's picture, as the first screen ----------
+   It lies on its own fixed layer between the ground and the gold dust (the dust drifts over it), under the
+   frame, the monogram and the words. On a phone it runs the full width from the top of the screen and fades
+   into the green from just above the monogram: the photograph is clear down past their joined hands, the
+   ring stands on the last of it, and from the names down there is no photograph at all (AA by construction,
+   measured by capture.mjs). The fade is a mask, so what shows through is the page's own ground and vignette. */
+.cover-shot {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  /* --fe: where the photograph has gone, measured from the bottom: 40px inside the top of the ring, so the ring
+     stands on the green with only the last breath of the picture behind its crown, and the words far below it.
+     --fl: the length of the fade above that, which starts just under their joined hands */
+  --fe: calc(var(--foot) + env(safe-area-inset-bottom) + var(--wf) + var(--ring));
+  --fl: clamp(120px, 18vh, 170px);
+  --fl: clamp(120px, 18svh, 170px);
+  transform-origin: 50% 30%;
+  /* a smoothstep from opaque to clear (no visible seam), and a short fall-off at the very top under the frame */
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, .5) 0, rgba(0, 0, 0, .86) 36px, #000 76px,
+    #000 calc(100% - var(--fe) - var(--fl)), rgba(0, 0, 0, .896) calc(100% - var(--fe) - var(--fl) * .8),
+    rgba(0, 0, 0, .648) calc(100% - var(--fe) - var(--fl) * .6), rgba(0, 0, 0, .352) calc(100% - var(--fe) - var(--fl) * .4),
+    rgba(0, 0, 0, .104) calc(100% - var(--fe) - var(--fl) * .2), transparent calc(100% - var(--fe)));
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, .5) 0, rgba(0, 0, 0, .86) 36px, #000 76px,
+    #000 calc(100% - var(--fe) - var(--fl)), rgba(0, 0, 0, .896) calc(100% - var(--fe) - var(--fl) * .8),
+    rgba(0, 0, 0, .648) calc(100% - var(--fe) - var(--fl) * .6), rgba(0, 0, 0, .352) calc(100% - var(--fe) - var(--fl) * .4),
+    rgba(0, 0, 0, .104) calc(100% - var(--fe) - var(--fl) * .2), transparent calc(100% - var(--fe)));
+}
+html.js .cover-shot { right: calc(0px - var(--gutter, 0px)); }
+html.js .cover-shot[hidden] { display: none !important; }
+/* without JS it is simply the top of the page, behind the first screen */
+html:not(.js) .cover-shot { position: absolute; top: 0; right: 0; bottom: auto; left: 0; height: 100vh; height: 100svh; }
+/* the photograph's own box, exactly the image's proportions (its blurred LQIP, .lqip, lies 1:1 under the <img>).
+   Full width on a phone; on a tall tablet, only as wide as keeps their joined hands (56% down the picture)
+   near the top of the fade, the sides melting into the green */
+.shot {
+  position: absolute; top: 0; left: 50%; translate: -50% 0;
+  width: min(100%, calc((100vh - var(--fe) - var(--fl)) * 1.4));
+  width: min(100%, calc((100svh - var(--fe) - var(--fl)) * 1.4));
+  aspect-ratio: 900 / 1280;
+  background-color: var(--ground);
+  transform-origin: 50% 24%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, rgba(0, 0, 0, .55) 3%, #000 8%, #000 92%, rgba(0, 0, 0, .55) 97%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, rgba(0, 0, 0, .55) 3%, #000 8%, #000 92%, rgba(0, 0, 0, .55) 97%, transparent 100%);
+}
+.shot img { position: relative; display: block; width: 100%; height: 100%; object-fit: cover; }
+/* the 20px placeholder under the <img>. Stretched 20 times by itself it shows a grid of soft blocks, not a
+   picture: blurred by about one of its own pixels at the size it is drawn, it reads as their photograph out of
+   focus. Its edges thin out under the blur, inside the box's own fades. Gone once the file has cross-faded in. */
+.shot .lqip {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: 50% 0; background-repeat: no-repeat;
+  filter: blur(var(--lq, 20px));
+}
+.shot:has(> img.is-loaded) > .lqip { visibility: hidden; transition: visibility 0s 800ms; }
+@media (min-width: 640px) and (min-height: 900px) { .shot { --lq: 32px; } }
+@media (min-aspect-ratio: 5/4) { .shot { --lq: 30px; } }
+@media (min-aspect-ratio: 5/4) and (max-height: 599px) { .shot { --lq: 18px; } }
+
+/* Landscape windows follow og.jpg: the photograph on the right, dissolving into the green towards the words,
+   and the monogram and the words centred in the left half. */
+@media (min-aspect-ratio: 5/4) {
+  .cover { justify-content: center; padding-right: 52%; padding-top: calc(28px + env(safe-area-inset-top)); padding-bottom: calc(var(--foot) * .5 + env(safe-area-inset-bottom)); }
+  /* the pill follows the words in the left column (centred there with them), not the foot of the window */
+  .cta, html.js .cta { position: relative; left: auto; right: auto; bottom: auto; flex: none; margin: 40px 0 0; }
+  html:not(.js) .cover { padding-right: 52%; }
+  .cover-shot { -webkit-mask-image: none; mask-image: none; }
+  .shot {
+    /* the full height of the window, its left edge just past the middle; the faces stay well clear of the fade */
+    top: 0; left: max(46%, calc(69% - 35.15vh)); left: max(46%, calc(69% - 35.15svh)); translate: none; width: auto; height: 100%;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, rgba(0, 0, 0, .18) 5%, rgba(0, 0, 0, .55) 11%, rgba(0, 0, 0, .9) 17%, #000 22%, #000 86%, rgba(0, 0, 0, .5) 94%, transparent 100%),
+      linear-gradient(180deg, rgba(0, 0, 0, .45) 0, #000 11%, #000 70%, rgba(0, 0, 0, .55) 86%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(90deg, transparent 0, rgba(0, 0, 0, .18) 5%, rgba(0, 0, 0, .55) 11%, rgba(0, 0, 0, .9) 17%, #000 22%, #000 86%, rgba(0, 0, 0, .5) 94%, transparent 100%),
+      linear-gradient(180deg, rgba(0, 0, 0, .45) 0, #000 11%, #000 70%, rgba(0, 0, 0, .55) 86%, transparent 100%);
+    mask-composite: intersect;
+  }
+}
+/* a tablet held upright: the same column, a size up */
+@media (min-width: 640px) and (min-height: 900px) and (max-aspect-ratio: 5/4) {
+  .cover { --ring: 176px; --sw: 1.45; }
+  .pair { font-size: 27px; line-height: 36px; margin-top: 28px; }
+  .cover .date { margin-top: 16px; font-size: 13px; line-height: 18px; }
+  .cover .dates { margin-top: 12px; font-size: 11.5px; line-height: 16px; }
+}
+/* a desktop window: a larger monogram, and the names set large, as on the share card */
+@media (min-aspect-ratio: 5/4) and (min-width: 900px) and (min-height: 600px) {
+  .cover { --ring: 200px; --sw: 1.28; }
+  .pair { font-size: clamp(30px, 2.8vw, 40px); line-height: 1.2; margin-top: 34px; }
+  .cover .date { margin-top: 22px; font-size: 14px; line-height: 18px; }
+  .cover .dates { margin-top: 14px; font-size: 11.5px; line-height: 16px; letter-spacing: .14em; padding-left: .14em; }
+}
+
+/* shockwave and bloom, centred on the monogram by main.js */
+.flash { position: fixed; inset: 0; z-index: 20; pointer-events: none; overflow: hidden; }
+.shock, .bloom { position: absolute; left: var(--cx, 50%); top: var(--cy, 40%); border-radius: 50%; opacity: 0; }
+.shock { width: 1200px; height: 1200px; margin: -600px 0 0 -600px; border: 2px solid var(--gold); }
+.bloom {
+  width: 520px; height: 520px; margin: -260px 0 0 -260px;
+  background: radial-gradient(closest-side, rgba(243, 227, 188, .9), rgba(243, 227, 188, .35) 38%, rgba(214, 188, 138, 0) 100%);
+}
+
+/* ---------- 2. the page ---------- */
+.page {
+  position: relative; z-index: 2;
+  max-width: 440px; margin: 0 auto;
+  padding: 0 max(28px, env(safe-area-inset-right)) calc(64px + env(safe-area-inset-bottom)) max(28px, env(safe-area-inset-left));
+  overflow-x: hidden; overflow-x: clip;
+}
+html.js:not(.is-open) .page { visibility: hidden; }
+html.js:not(.is-landed), html.js:not(.is-landed) body { overflow: hidden; }
+/* an impatient second tap must never reach a control that is not on screen yet */
+html.js:not(.is-landed) .page { pointer-events: none; }
+html.motion .invitation > .actions:not(.is-ready) .btn,
+html.motion .invitation > .actions:not(.is-ready) + .gcal-slot .gcal,
+html.motion .blessings:not(.is-ready) .btn { pointer-events: none; }
+
+section { display: flex; flex-direction: column; align-items: center; }
+
+/* H2/L2 pages: each section is exactly one screen, its content centred (the invitation stays top-aligned), and
+   the next prompt sits at the bottom. The vertical rhythm below (four height tiers) makes every page's content fit
+   its screen from 360x640 up, so no page scrolls inside itself; on a screen too short even for that (a phone held
+   sideways) a page grows rather than overlapping the next. */
+html.js .page { padding-bottom: 0; }
+html.js .page > section {
+  position: relative; min-height: 100vh; min-height: 100svh; padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  scroll-snap-align: start; scroll-snap-stop: always;
+}
+@media (min-height: 600px) { html.js .page > section:not(.blessings) { height: 100vh; height: 100svh; } }
+html.js .page > section:not(.invitation)::before { content: ''; flex: 1 0 0px; }
+html.js .page > section::after { content: ''; flex: 1 0 0px; order: 2; }
+html.js .reception { padding-top: 32px; }
+/* the last page and the kasavu edge under it (9px) make one screen together */
+html.js .page > .blessings {
+  padding-top: 56px; padding-bottom: 36px;
+  min-height: calc(100vh - 9px - env(safe-area-inset-bottom)); min-height: calc(100svh - 9px - env(safe-area-inset-bottom));
+}
+/* L2. one swipe, one page: once the invitation has opened (main.js adds .snap at the landing), the screen snaps to
+   each page's top and a flick never passes one; the idle peek lifts it for its two seconds (.no-snap) */
+html.js.snap { scroll-snap-type: y mandatory; }
+html.js.snap.no-snap { scroll-snap-type: none; }
+/* on a touch screen whose pages all fit, main.js turns the pages itself (one swipe, one page: a hard fling in Chrome
+   runs past scroll-snap-stop); the browser keeps pinch zoom */
+html.js.snap.paged { touch-action: pinch-zoom; }
+[data-head]:focus { outline: none; }
+
+.next {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; flex: none; order: 3;
+  min-width: 48px; margin: 14px 0 0; padding: 0 8px 6px; border: 0; border-radius: 10px; background: none; cursor: pointer;
+  color: var(--gold); font: inherit;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+/* L3. the next prompt: a small tracked gold label over the bobbing hairline circle, one tap target. Its box keeps
+   6px under the circle for the bob, so "wholly on screen" includes it. */
+.next-label {
+  display: block; font-family: var(--sans); font-weight: 600; font-size: 11px; line-height: 14px;
+  letter-spacing: .26em; padding-left: .26em; text-transform: uppercase; color: var(--gold); white-space: nowrap;
+}
+.next-label .gold-dot { opacity: .7; }
+.next svg { position: relative; display: block; flex: none; width: 44px; height: 44px; overflow: visible; fill: none; stroke: var(--gold); stroke-width: 1; }
+.next circle { transform: rotate(-90deg); transform-origin: 22px 22px; }
+.next path { stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
+.next:focus { outline: none; }
+.next:focus-visible { outline: 2px solid var(--ivory); outline-offset: 2px; }
+@media (hover: hover) { .next:hover circle { stroke-width: 1.5; } }
+html:not(.js) .next { display: none; }
+.invitation > .next { margin-top: 4px; }
+
+/* L5. page dots: three tiny gold marks stacked at the right edge, centred; the current page's is longer and
+   brighter. Each is a 44px button (the mark stays 3px wide) whose mark sits 10px in from the edge, outside the
+   reception frame's line (28px in on a phone). Not on the cover; they arrive with the music toggle. */
+.dots {
+  position: fixed; z-index: 24; top: 50%; right: env(safe-area-inset-right);
+  display: flex; flex-direction: column; translate: 0 -50%;
+}
+.dots[hidden], html:not(.js) .dots { display: none !important; }
+html.js:not(.is-landed) .dots { visibility: hidden; pointer-events: none; }
+.pdot {
+  position: relative; display: block; width: 44px; height: 44px; margin: 0; padding: 0; border: 0; background: none;
+  cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.pdot i {
+  position: absolute; right: 10px; top: 50%; width: 3px; height: 3px; margin-top: -1.5px; border-radius: 1.5px;
+  background: var(--gold); opacity: .55;
+  transition: height 450ms var(--ease), margin-top 450ms var(--ease), opacity 450ms var(--ease);
+}
+/* a round dot grows into a short rounded bar (a 3px box: the height change costs nothing) */
+.pdot[aria-current="true"] i { height: 15px; margin-top: -7.5px; opacity: 1; }
+@media (hover: hover) { .pdot:hover i { opacity: .9; } }
+.pdot:focus { outline: none; }
+.pdot:focus-visible { outline: 2px solid var(--ivory); outline-offset: -10px; border-radius: 50%; }
+
+/* K. the background-music toggle (music.js): a 40px hairline gold circle 16px inside the top-right safe area, on a
+   faint deep-green disc so it reads over the photographs, in a 44px tap box. Three thin gold bars sway while the
+   music plays; muted, they lie flat and a diagonal hairline crosses them. It shows only once the invitation has
+   opened (the motion block below), never over the cover's frame; no JavaScript or no playable track: none at all. */
+.sound {
+  position: fixed; z-index: 25;
+  top: calc(14px + env(safe-area-inset-top)); right: calc(14px + env(safe-area-inset-right));
+  width: 44px; height: 44px; margin: 0; padding: 0; border: 0; border-radius: 50%;
+  background: none; color: inherit; cursor: pointer;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.sound[hidden], html:not(.js) .sound { display: none !important; }
+html.js:not(.is-landed) .sound { visibility: hidden; pointer-events: none; }
+.sound svg { position: absolute; inset: 0; width: 44px; height: 44px; overflow: visible; fill: none; stroke: var(--gold); stroke-width: 1; }
+.sound .snd-disc { fill: rgba(11, 29, 23, .55); stroke: none; transition: fill 200ms var(--ease); }
+.sound .snd-ring { transform: rotate(-90deg); transform-origin: 22px 22px; }
+.sound .snd-mute { stroke-linecap: round; stroke-dasharray: 1 2; stroke-dashoffset: 0; transition: stroke-dashoffset 400ms var(--ease); }
+.sound.is-on .snd-mute { stroke-dashoffset: 1; }
+/* the bars are HTML, so their sway (transform) runs on the compositor; muted, they flatten through scale */
+.snd-bars { position: absolute; left: 50%; top: 50%; display: flex; align-items: center; gap: 3.25px; height: 16px; transform: translate(-50%, -50%); pointer-events: none; }
+.snd-bars i { display: block; flex: none; width: 1.25px; height: 10px; border-radius: 1px; background: var(--gold); scale: 1 .2; transition: scale 400ms var(--ease); }
+.snd-bars i:nth-child(2) { height: 16px; }
+.snd-bars i:nth-child(3) { height: 8px; }
+.sound.is-on .snd-bars i { scale: 1 1; }
+.sound:active .snd-disc { fill: rgba(29, 66, 52, .8); }
+/* on a phone it steps aside while the reception's gold frame passes under it (music.js tuck), and returns after */
+.sound > * { transition: opacity 300ms var(--ease); }
+.sound.is-tucked { pointer-events: none; }
+.sound.is-tucked > * { opacity: 0; }
+.sound.is-tucked:focus-visible > * { opacity: 1; }
+.sound:focus { outline: none; }
+.sound:focus-visible { outline: 2px solid var(--ivory); outline-offset: 0; }
+@media (hover: hover) { .sound:hover .snd-ring { stroke-width: 1.5; } }
+
+.invitation {
+  min-height: 100vh; min-height: 100svh;
+  padding-top: calc(24px + env(safe-area-inset-top));
+}
+html:not(.js) .invitation { min-height: 0; padding-top: 24px; }
+.slot { position: relative; z-index: 0; width: 96px; height: 96px; flex: none; --sw: 2.5; }
+html:not(.js) .slot { display: none; }
+.slot .mono-glow { inset: -112.5%; }
+.invitation > .families, .invitation > .invite { position: relative; z-index: 1; }
+.families { margin-top: 19px; letter-spacing: .2em; padding-left: .2em; }
+.invite { margin-top: 8px; }
+.names { position: relative; margin-top: 25px; font-size: inherit; }
+/* wipes carry padding (cancelled by negative margins) so glyph overhangs stay inside their mask */
+.wipe { padding: .2em .3em; }
+.name { position: relative; display: block; width: fit-content; margin: -.2em auto; font-size: 52px; line-height: 58px; letter-spacing: .005em; }
+.weds { display: block; font-size: 22px; line-height: 40px; font-style: italic; color: var(--gold); }
+.names:focus { outline: none; }
+
+.rule { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 25px; }
+.rule::before, .rule::after { content: ''; width: 44px; height: 1px; background: var(--gold); }
+.rule::before { transform-origin: 100% 50%; }
+.rule::after { transform-origin: 0 50%; }
+.rule i { width: 6px; height: 6px; border: 1px solid var(--gold); transform: rotate(45deg); }
+.hair { width: 32px; height: 1px; background: var(--gold); margin: 20px auto; }
+.invitation > .hair { margin: 13px auto; }
+.when { margin-top: 22px; }
+.invitation > .when { margin-top: 18px; }
+.when .body, .where .body { margin-top: 4px; }
+
+.actions { display: flex; justify-content: center; gap: 14px; margin-top: 22px; width: 100%; }
+.invitation > .actions { margin-top: 18px; }
+
+/* buttons */
+.btn {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: inline-grid; place-items: center; flex: 0 1 150px; min-height: 48px;
+  padding: 0 8px 0 calc(8px + .18em);
+  border: 1px solid var(--gold); border-radius: 2px;
+  background: transparent; color: var(--gold);
+  font-family: var(--sans); font-weight: 600; font-size: 12px; line-height: 1.2; letter-spacing: .18em; text-transform: uppercase;
+  text-decoration: none; white-space: nowrap; cursor: pointer;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.btn > * { grid-area: 1 / 1; }
+.btn > .btn-sheen, .btn > .btn-ripple { grid-area: auto; }
+.btn-label { position: relative; z-index: 2; transition: opacity 250ms var(--ease), filter 250ms var(--ease); }
+.btn:focus { outline: none; }
+.btn:focus-visible { outline: 2px solid var(--ivory); outline-offset: 3px; }
+.btn-sheen {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(105deg, rgba(243, 227, 188, 0) 30%, rgba(243, 227, 188, .26) 50%, rgba(243, 227, 188, 0) 70%);
+  transform: translateX(-110%);
+}
+@media (hover: hover) {
+  .btn:hover .btn-sheen { transform: translateX(110%); transition: transform 900ms var(--ease); }
+}
+.btn:focus-visible .btn-sheen { transform: translateX(110%); transition: transform 900ms var(--ease); }
+.btn.sheen-once .btn-sheen { animation: btnSheen 1000ms var(--ease) both; }
+.btn-ripple {
+  position: absolute; z-index: 1; width: 260px; height: 260px; margin: -130px 0 0 -130px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(243, 227, 188, .45), rgba(214, 188, 138, .16) 55%, rgba(214, 188, 138, 0));
+}
+.btn-solid { background: var(--gold); color: var(--ground); transition: box-shadow 450ms var(--ease); }
+.btn-solid.is-glow { box-shadow: 0 0 30px 6px rgba(243, 227, 188, .42); transition-duration: 180ms; }
+.btn-solid .btn-sheen { background: linear-gradient(105deg, rgba(243, 227, 188, 0) 30%, rgba(243, 227, 188, .75) 50%, rgba(243, 227, 188, 0) 70%); }
+.btn-solid .btn-ripple { background: radial-gradient(closest-side, rgba(243, 227, 188, .8), rgba(243, 227, 188, 0)); }
+.btn-alt { opacity: 0; }
+.btn.is-sent .btn-label:not(.btn-alt) { opacity: 0; }
+.btn.is-sent .btn-alt { opacity: 1; }
+/* the two labels hand over one after the other rather than smearing into each other */
+.btn-solid .btn-label { transition: opacity 250ms var(--ease) 140ms; }
+.btn-solid .btn-alt { transition: opacity 140ms var(--ease); }
+.btn-solid.is-sent .btn-label { transition: opacity 140ms var(--ease); }
+.btn-solid.is-sent .btn-alt { transition: opacity 250ms var(--ease) 140ms; }
+
+/* drawn hairline borders (js): top/bottom grow from the centre, then the sides */
+html.js .btn-draw, html.js .btn-line { border: 0; }
+html.js .btn-draw::before, html.js .btn-draw::after,
+html.js .btn-line::before, html.js .btn-line::after { content: ''; position: absolute; inset: 0; border-radius: 2px; pointer-events: none; z-index: 3; }
+html.js .btn-draw::before, html.js .btn-line::before { border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold); }
+html.js .btn-draw::after, html.js .btn-line::after { border-left: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+
+.btn-check { width: 22px; height: 22px; fill: none; stroke: var(--gold); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; opacity: 0; z-index: 2; }
+.btn-check path { stroke-dasharray: 1 2; stroke-dashoffset: 1.01; }
+.btn.is-done .btn-label { filter: opacity(0); }
+.btn-check { transition: opacity 200ms var(--ease); }
+.btn.is-done .btn-check { opacity: 1; }
+.btn.is-done .btn-check path { animation: draw 450ms var(--ease) 120ms both; }
+html.reduce-motion .btn.is-done .btn-check path { animation: none; stroke-dashoffset: 0; }
+
+/* the link and the Save the date status share one cell and cross-fade (main.js), so the status never adds height */
+.gcal-slot { display: grid; place-items: center; margin-top: 3px; }
+.gcal-slot > * { grid-area: 1 / 1; }
+.gcal-slot .gcal { transition: filter 250ms var(--ease) 120ms, visibility 0s linear 0s; }
+.gcal-slot.is-saved .gcal { filter: opacity(0); visibility: hidden; transition: filter 160ms var(--ease), visibility 0s linear 160ms; }
+.gcal-slot .status { transition: filter 200ms var(--ease); }
+.gcal-slot:not(.is-saved) .status { filter: opacity(0); }
+.gcal {
+  display: inline-flex; align-items: center; min-height: 40px; padding: 0 8px;
+  font-style: italic; font-size: 16px; color: var(--gold);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px;
+  text-decoration-color: rgba(214, 188, 138, .45);
+}
+.gcal:focus { outline: none; }
+.gcal:focus-visible { outline: 2px solid var(--ivory); outline-offset: 2px; border-radius: 2px; }
+@media (hover: hover) { .gcal:hover { text-decoration-color: var(--gold); } }
+
+/* I2.2 the quiet jump down to the reception: no second underline next to the Google Calendar link, just the arrow */
+.jump {
+  display: inline-flex; align-items: center; gap: 9px; flex: none;
+  min-height: 32px; padding: 0 8px;
+  font-style: italic; font-size: 16px; line-height: 20px; color: var(--gold); text-decoration: none;
+}
+.jump-arrow { width: 11px; height: 14px; flex: none; fill: none; stroke: var(--gold); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
+.jump:focus { outline: none; }
+.jump:focus-visible { outline: 2px solid var(--ivory); outline-offset: 2px; border-radius: 2px; }
+@media (hover: hover) { .jump:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; text-decoration-color: rgba(214, 188, 138, .5); } }
+
+.status { min-height: 0; font-size: 15px; line-height: 22px; font-style: italic; color: var(--ivory); max-width: 320px; }
+.status:not(:empty) { margin-top: 6px; animation: rise 500ms var(--ease) both; }
+.gcal-slot > .status:not(:empty) { margin-top: 0; }
+html.reduce-motion .status:not(:empty) { animation: fadeIn 200ms linear both; }
+.share-link {
+  margin-top: 12px; width: 100%; max-width: 320px; min-height: 44px; padding: 0 12px;
+  background: transparent; color: var(--ivory); border: 1px solid rgba(214, 188, 138, .6); border-radius: 2px;
+  font: 15px/1 var(--sans); text-align: center;
+}
+.share-link:focus { outline: 1px solid var(--gold); outline-offset: 3px; }
+.share-link::selection { background: rgba(214, 188, 138, .35); color: var(--ivory); }
+
+/* ---------- I1. the photographs: graded, scrimmed, framed, never a card ----------
+   .ph  a photograph that belongs to the layout (the reception's background, the closing portrait): a gold
+        hairline, a scrim of the ground colour over it, a light wipe on reveal and a slow Ken Burns drift.
+   .bk  a faint darkened backdrop behind a whole screen: no frame, no wipe, just a fade.
+   A missing file hides its <img> (inline onerror): the frame, the scrim tone and the layout all stay. */
+.ph, .bk { position: relative; pointer-events: none; }
+.ph img, .bk img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* the scrim: the ground colour over the photograph, strongest where words sit, so nothing needs a black box */
+.ph::before, .bk::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+
+/* the reception's background, filling the gold frame's padding box (the frame, clasp and running light sit on its edge) */
+.ph-bg { position: absolute; inset: 0; z-index: -2; overflow: hidden; background: var(--ground); }
+.ph-bg img { object-position: 50% 40%; }
+/* the veil that settles the picture into the green. It covers the whole frame evenly, including the
+   clear window, so that the wash painted by .ph-win below can run all the way down to nothing at the
+   window's edges: ending it on a value instead would leave a visible step across the photograph. */
+.ph-bg::before { background: rgba(16, 39, 31, .18); }
+
+/* I1/I2.3 THE CLEAR WINDOW. Veiling the whole frame hard enough for words (.72 and up) turned the
+   couple into a smudge, and this is the one screen he wants looked at. So the scrim opens: an empty
+   box sits in the panel's flow where the two of them fall, and its pseudo-element paints the entire
+   wash outwards from its own two edges - ground at the panel's ends, .88 by 64px out, .60 by 24px,
+   .12 inside the window. Because the gradients are anchored to the box and measured in px, the wash
+   always lands exactly where the words are, however the type wraps or the viewport changes: no
+   measuring, no JS, nothing for a ResizeObserver to miss. The panel clips the overhang. */
+.ph-win { position: relative; height: clamp(140px, 21svh, 186px); margin: 26px 0 0; }
+.ph-win::before {
+  content: ''; position: absolute; left: -44px; right: -44px; top: -900px; bottom: -900px;
+  z-index: -2; pointer-events: none;
+  /* each layer is anchored to one edge of the window and measured in px from it, so the wash is
+     the same whatever the panel's height. 900px is simply longer than any panel, so the ends of
+     the frame are always ground. The ramp takes 200px: a short one shows as a seam across the
+     picture. The foot is a little stronger than the head, because more words sit under it. */
+  background:
+    linear-gradient(180deg, var(--ground) 0 700px, rgba(16, 39, 31, .866) 790px, rgba(16, 39, 31, .663) 840px,
+      rgba(16, 39, 31, .394) 868px, rgba(16, 39, 31, .169) 886px, rgba(16, 39, 31, 0) 900px) top / 100% 900px no-repeat,
+    linear-gradient(0deg, var(--ground) 0 700px, rgba(16, 39, 31, .945) 796px, rgba(16, 39, 31, .88) 842px,
+      rgba(16, 39, 31, .84) 858px, rgba(16, 39, 31, .76) 870px, rgba(16, 39, 31, .38) 888px,
+      rgba(16, 39, 31, 0) 900px) bottom / 100% 900px no-repeat;
+}
+/* if the photograph itself is missing, the inline onerror hides the <img> and the window would be a
+   hole in the middle of the panel; close it up and let the words sit together on plain green */
+.panel:has(.ph-bg img[hidden]) .ph-win { height: 0; margin: 0; }
+.panel:has(.ph-bg img[hidden]) .ph-win::before { display: none; }
+
+/* an older engine that cannot clip the overhang keeps the old single full-frame gradient instead */
+@supports not (overflow: clip) {
+  .ph-win::before { display: none; }
+  .ph-bg::before {
+    background: linear-gradient(180deg, var(--ground) 0%, rgba(16, 39, 31, .86) 14%, rgba(16, 39, 31, .72) 34%,
+      rgba(16, 39, 31, .8) 62%, rgba(16, 39, 31, .95) 86%, var(--ground) 100%);
+  }
+}
+
+/* the closing portrait: a mandapam arch, the hairline following it, a ◇ at the peak */
+.ph-portrait {
+  width: auto; flex: none; aspect-ratio: 4 / 5; height: clamp(176px, 30svh, 290px);
+  margin: 0 0 24px; border-radius: 50% 50% 5% 5% / 27.6% 27.6% 2.5% 2.5%;
+}
+.ph-portrait img { object-position: 50% 32%; }
+/* the crop carries the arch so the Ken Burns drift cannot push a corner past the hairline, and the ◇ on top of it stays whole */
+.ph-crop { position: absolute; inset: 0; display: block; overflow: hidden; border-radius: inherit; }
+.ph-portrait::before {
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(16, 39, 31, .1) 0%, rgba(16, 39, 31, 0) 30%, rgba(16, 39, 31, .45) 100%);
+}
+/* the arch hairline is measured and drawn by main.js; without JavaScript there is no path to draw,
+   so the border radius carries the same line */
+html:not(.js) .ph-portrait { border: 1px solid var(--gold); }
+.ph-arch { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; overflow: visible; fill: none; stroke: var(--gold); stroke-width: 1; }
+.ph-gem {
+  position: absolute; left: 50%; top: 0; z-index: 3; width: 7px; height: 7px; margin: -4px 0 0 -3.5px;
+  background: var(--gold); rotate: 45deg;
+}
+
+/* the backdrops (pre-blurred and darkened by the pipeline): a whisper of the garden behind a whole screen */
+.bk { position: absolute; inset: 0; z-index: -3; overflow: hidden; }
+/* .68, not .86: at full strength the blurred garden reads as smudges behind "Your presence is our
+   greatest joy." rather than as depth, and this screen's job is to be quiet */
+.bk img { opacity: .68; object-position: 50% 50%; }
+.bk::before {
+  background: linear-gradient(180deg, var(--ground) 0%, rgba(16, 39, 31, .8) 9%, rgba(16, 39, 31, .54) 22%,
+    rgba(16, 39, 31, .34) 50%, rgba(16, 39, 31, .72) 84%, var(--ground) 100%);
+}
+
+/* large screens: the reception is the centrepiece, so its frame and photograph take a little more room
+   than the 440px column (the page box lets it, as the countdown medallion used to) */
+@media (min-width: 768px) and (min-height: 600px) {
+  .reception > .panel { width: 486px; }
+}
+
+/* H4.4 page ornament: a lotus bud between two curling scrolls ending in dots (120 x 18, 1px hairline) */
+.orn { display: block; flex: none; width: 132px; height: 19.8px; overflow: visible; fill: none; stroke: var(--gold); stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; }
+.orn .dot { fill: var(--gold); stroke: none; }
+
+/* H4.6 a soft lift glow behind each page's heading (blooms on reveal, then breathes very slowly) */
+.blessings > .label { position: relative; }
+.names::before, .blessings > .label::before, .panel > .halo {
+  content: ''; position: absolute; left: 50%; top: 50%; z-index: -1; pointer-events: none;
+  width: 380px; height: 300px; margin: -150px 0 0 -190px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(29, 66, 52, .82) 0, rgba(29, 66, 52, .74) 12%, rgba(29, 66, 52, .63) 25%,
+    rgba(29, 66, 52, .5) 38%, rgba(29, 66, 52, .36) 52%, rgba(29, 66, 52, .22) 66%, rgba(29, 66, 52, .1) 80%, rgba(29, 66, 52, .03) 91%, rgba(29, 66, 52, 0) 100%);
+}
+.blessings > .label::before { top: 120%; }
+.panel > .halo { display: block; top: 102px; }
+
+/* large screens: the page box lets each screen's glow reach past the 440px column */
+@media (min-width: 768px) and (min-height: 600px) { .page { overflow-x: visible; } }
+
+/* reception */
+.reception { padding-top: 88px; }
+.panel {
+  position: relative; width: 100%; padding: 34px 24px 32px; border: 1px solid var(--gold); border-top-color: transparent;
+  overflow: clip; overflow-clip-margin: 64px;
+}
+/* without JS the top edge is drawn here, stopping either side of the clasp */
+.panel::before {
+  content: ''; position: absolute; left: -1px; right: -1px; top: -1px; height: 1px; pointer-events: none;
+  background: linear-gradient(90deg, var(--gold) calc(50% - 56px), transparent 0 calc(50% + 56px), var(--gold) 0);
+}
+html.js .panel { border-color: transparent; }
+html.js .panel::before { display: none; }
+.frame { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; fill: none; stroke: var(--gold); stroke-width: 1; pointer-events: none; }
+html:not(.js) .frame { display: none; }
+/* H4.5 the running light: three centred dashes (long and faint, shorter, a short bright core with a glow) so the
+   segment tapers at both ends; each rests just before its path starts */
+.frame .run { stroke: var(--bright); stroke-dasharray: .03 2; stroke-dashoffset: .1; stroke-width: 1.4; filter: drop-shadow(0 0 2px rgba(243, 227, 188, .9)); }
+.frame .run-a { stroke-width: 1; stroke-opacity: .35; stroke-dasharray: .09 2; filter: none; }
+.frame .run-b { stroke-opacity: .6; stroke-dasharray: .055 2; filter: none; }
+html.reduce-motion .frame .run { display: none; }
+/* the clasp breaks the top edge at its centre: its dots sit on the line */
+.panel > .clasp { position: absolute; left: 50%; top: 0; margin: -13.4px 0 0 -66px; }
+.panel > .actions { margin-top: 20px; }
+.panel .hair { margin: 15px auto; }
+.panel > .actions .btn { flex: 0 1 190px; }
+.reception > .next { margin-top: 14px; }
+/* I2.3 "Reception" carries the weight of the couple's names (the light wipe and the sheen follow it) */
+.title { position: relative; width: fit-content; margin: calc(6px - .2em) auto -.2em; font-size: 52px; line-height: 58px; letter-spacing: .005em; }
+.panel .rule { margin-top: 16px; }
+.panel .when { margin-top: 28px; }
+.panel > .gcal { margin-top: 4px; }
+/* the one live line, counting to whichever event is next */
+.count-line { margin-top: 8px; font-size: 15px; line-height: 22px; font-style: italic; color: rgba(241, 235, 221, .92); }
+.count-line[hidden] { display: none; }
+.glint { position: absolute; width: 16px; height: 16px; margin: -8px 0 0 -8px; opacity: 0; pointer-events: none; }
+.glint::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle, var(--bright) 0 16%, var(--gold) 60%);
+  clip-path: polygon(50% 0, 58% 42%, 100% 50%, 58% 58%, 50% 100%, 42% 58%, 0 50%, 42% 42%);
+}
+.glint::after { content: ''; position: absolute; inset: -6px; border-radius: 50%; background: radial-gradient(closest-side, rgba(243, 227, 188, .35), rgba(243, 227, 188, 0)); }
+.g1 { left: 0; top: 0; } .g2 { left: 100%; top: 0; } .g3 { left: 0; top: 100%; } .g4 { left: 100%; top: 100%; }
+
+/* blessings: the arched portrait took the lotus filigree's place, so the rhythm below it is tighter */
+.blessings { padding-top: 56px; }
+.hosts { margin-top: 12px; }
+.closing { margin-top: 34px; }
+.actions-bless { flex-direction: column; align-items: center; gap: 12px; margin-top: 30px; }
+.actions-bless .btn { flex: none; width: 100%; max-width: 280px; }
+html:not(.js) .actions-bless { display: none; }
+.actions-bless + .status { min-height: 26px; margin-top: 8px; }
+.foot { margin-top: 28px; display: flex; flex-direction: column; align-items: center; }
+.foot-mono { width: 52px; height: 52px; --sw: 4.4; }
+.foot-date { margin-top: 12px; }
+
+/* H4.7 kasavu: a hairline over a woven 4px gold band, across the full width, the band on the screen's very edge
+   (a selvedge, not a footer rule floating above it) */
+.kasavu { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 4px; padding: 0 0 env(safe-area-inset-bottom); pointer-events: none; }
+.kasavu i { position: relative; display: block; height: 1px; background: var(--gold); overflow: hidden; }
+/* the weave is a whisper (a faintly thinner thread every 6px), so the band reads as zari, not as a ruler */
+.kasavu i + i { height: 4px; background: repeating-linear-gradient(90deg, var(--gold) 0 5px, rgba(214, 188, 138, .94) 5px 6px); }
+.kasavu i + i::after { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 24%; opacity: 0; background: linear-gradient(90deg, rgba(243, 227, 188, 0), rgba(243, 227, 188, .95), rgba(243, 227, 188, 0)); }
+html.js:not(.is-open) .kasavu { visibility: hidden; }
+
+/* 320-350-wide phones: the panel gives its words more room, and the titles step down a size */
+@media (max-width: 350px) {
+  .panel { padding-left: 12px; padding-right: 12px; }
+  .panel .sub { font-size: 20px; }
+  /* "Sunday, 1 November 2026" must stay on one line here: wrapped, its second line rises into the
+     clear window of the scrim and the measured contrast falls to 3.2:1 (capture.mjs catches it) */
+  .panel .when .sub { font-size: 18px; }
+  /* a 264px-wide panel crops a 9:16 photograph to a narrow slice, so the picture is zoomed about
+     1.6x and much brighter behind these words than it is at 390. They need more air under the window. */
+  .panel .when { margin-top: 40px; }
+  .btn { font-size: 11px; letter-spacing: .12em; padding-left: calc(6px + .12em); padding-right: 6px; }
+  .name, .title { font-size: 48px; line-height: 54px; }
+}
+
+/* L2. The opened pages on real phone heights (browser bars leave 640-780px). Each tier is sized so every page's
+   content, its next prompt and the prompt's bob fit the SHORTEST screen of the tier: over 860 (the defaults above),
+   801-860, 721-800, and 640-720. The flight measures the slot, so it follows. */
+@media (max-height: 860px) {
+  .slot { width: 80px; height: 80px; --sw: 3; }
+  .families { margin-top: 20px; }
+  .invitation > .invite { line-height: 24px; }
+  .names { margin-top: 22px; }
+  .name { font-size: 46px; line-height: 50px; }
+  .weds { line-height: 34px; }
+  .invitation > .rule { margin-top: 24px; }
+  .invitation > .hair { margin: 14px auto; }
+  .invitation .where .sub { line-height: 28px; }
+  .invitation > .actions { margin-top: 16px; }
+  .gcal-slot { margin-top: 2px; }
+  .jump { font-size: 15px; }
+  html.js .reception { padding-top: 30px; }
+  .panel { padding: 34px 20px 30px; }
+  .title { font-size: 46px; line-height: 50px; }
+  .panel .rule { margin-top: 18px; }
+  .panel .when { margin-top: 18px; }
+  .panel .hair { margin: 13px auto; }
+  .panel .where .sub { line-height: 28px; }
+  .panel > .actions { margin-top: 18px; }
+  .panel > .gcal { margin-top: 0; min-height: 38px; }
+  .count-line { margin-top: 6px; }
+  html.js .page > .blessings { padding-top: 34px; padding-bottom: 26px; }
+  .closing { margin-top: 24px; }
+  .actions-bless { margin-top: 22px; }
+  .foot { margin-top: 20px; }
+}
+@media (max-height: 800px) {
+  .invitation { padding-top: calc(12px + env(safe-area-inset-top)); }
+  .slot { width: 64px; height: 64px; --sw: 3.75; }
+  .families { margin-top: 16px; }
+  .invitation > .invite { margin-top: 8px; }
+  .names { margin-top: 15px; }
+  .name { font-size: 44px; line-height: 48px; }
+  .weds { font-size: 20px; line-height: 30px; }
+  .invitation > .rule { margin-top: 17px; }
+  .invitation > .when { margin-top: 13px; }
+  .invitation > .hair { margin: 9px auto; }
+  .invitation > .actions { margin-top: 13px; }
+  .jump { min-height: 28px; font-size: 14px; gap: 7px; }
+  .invitation > .next { margin-top: 0; }
+  html.js .reception { padding-top: 22px; }
+  .panel { padding: 30px 18px 26px; }
+  .title { font-size: 44px; line-height: 48px; }
+  .ph-win { height: clamp(120px, 18svh, 186px); }
+  .panel .when { margin-top: 16px; }
+  .panel .hair { margin: 11px auto; }
+  .reception > .next { margin-top: 10px; }
+  .ph-portrait { margin-bottom: 18px; }
+  .closing { margin-top: 20px; }
+  .foot-mono { width: 46px; height: 46px; --sw: 5; }
+}
+@media (max-height: 720px) {
+  html.js .page > section { padding-bottom: calc(6px + env(safe-area-inset-bottom)); }
+  .next { gap: 4px; }
+  .next svg { width: 40px; height: 40px; }
+  /* the wedding */
+  .invitation { padding-top: calc(10px + env(safe-area-inset-top)); }
+  .slot { width: 56px; height: 56px; --sw: 4.3; }
+  .families { margin-top: 12px; }
+  .invitation > .invite { margin-top: 6px; font-size: 16px; line-height: 22px; }
+  .names { margin-top: 10px; }
+  .name { font-size: 42px; line-height: 46px; }
+  .weds { font-size: 19px; line-height: 26px; }
+  .invitation > .rule { margin-top: 12px; }
+  .invitation > .when { margin-top: 10px; }
+  .invitation .sub { font-size: 20px; line-height: 26px; }
+  .invitation .where .sub { line-height: 25px; }
+  .invitation :is(.when, .where) .body { margin-top: 3px; font-size: 16px; line-height: 22px; }
+  .invitation > .hair { margin: 8px auto; }
+  .invitation > .actions { margin-top: 10px; }
+  .gcal-slot { margin-top: 0; }
+  .gcal { min-height: 34px; }
+  .jump { min-height: 26px; }
+  .invitation > .next { margin-top: 4px; }
+  /* the reception */
+  html.js .reception { padding-top: 18px; }
+  .panel { padding: 24px 18px 16px; }
+  .panel .body { font-size: 16px; line-height: 22px; }
+  .title { font-size: 40px; line-height: 44px; margin-top: calc(2px - .2em); }
+  .panel .rule { margin-top: 12px; }
+  .ph-win { height: clamp(120px, 20svh, 186px); margin-top: 16px; }
+  .panel .when { margin-top: 12px; }
+  .panel .sub, .panel .where .sub { font-size: 20px; line-height: 26px; }
+  .panel :is(.when, .where) .body { margin-top: 3px; }
+  .panel .hair { margin: 8px auto; }
+  .panel > .actions { margin-top: 12px; }
+  .panel > .gcal { min-height: 32px; font-size: 15px; }
+  .count-line { margin-top: 2px; font-size: 14px; line-height: 20px; }
+  .reception > .next { margin-top: 8px; }
+  /* the closing */
+  html.js .page > .blessings { padding-top: 30px; padding-bottom: 20px; }
+  .ph-portrait { margin-bottom: 14px; }
+  .hosts { margin-top: 8px; }
+  .closing { margin-top: 18px; line-height: 28px; }
+  .actions-bless { margin-top: 18px; }
+  .actions-bless + .status { margin-top: 4px; min-height: 22px; }
+  .foot { margin-top: 16px; }
+  .foot-mono { width: 44px; height: 44px; --sw: 5.2; }
+  .foot-date { margin-top: 8px; }
+}
+/* 320-350 wide at a phone's height: the reception's date keeps the extra air under the window it needs there
+   (the max-width: 350px rules above) */
+@media (max-width: 350px) and (max-height: 720px) {
+  .panel .when { margin-top: 30px; }
+  .panel .when .sub { font-size: 18px; }
+}
+
+/* ======================= motion (html.motion only) ======================= */
+
+/* A. ambient */
+html.motion .backdrop { animation: settle 1800ms var(--ease) both; }
+html.motion .backdrop::before { animation: fadeOut 1400ms var(--ease) both; }
+/* the dust fades itself in (particles.js startAmbient, 1500ms); a CSS fade here would compound it */
+/* --breath (main.js, at the landing): the re-parented monogram's new animation picks up in phase */
+html.motion .mono-glow::before { animation: breathe 5s ease-in-out var(--breath, 0ms) infinite alternate; }
+html.mono-off .mono-glow::before { animation-play-state: paused; }
+
+/* B. intro */
+html.motion .mono .ring { stroke-dasharray: 1 2; animation: draw 1100ms var(--travel) 200ms both; }
+html.motion .mono .st { stroke-dasharray: 1 2; animation: draw 380ms var(--travel) var(--d) both, brighten 560ms var(--ease) var(--d) both; }
+html.motion .mono .st1 { --d: 700ms; }
+html.motion .mono .st2 { --d: 790ms; }
+html.motion .mono .st3 { --d: 880ms; }
+html.motion .mono .st4 { --d: 970ms; }
+html.motion .mono .st5 { --d: 1000ms; }
+html.motion .mono .st6 { --d: 1090ms; }
+html.motion .mono .st7 { --d: 1180ms; }
+html.motion .mono.is-drawn .ring, html.motion .mono.is-drawn .st { animation: none; stroke-dasharray: none; stroke-dashoffset: 0; }
+html.motion .mono-tip { animation: tipSpin 1100ms var(--travel) 200ms both, tipFade 1100ms linear 200ms both; }
+/* the tip spark rides the ring once more during the flight (main.js), then leaves with it */
+html.is-open .mono-ripple, html.is-open .mono-pulse, html.is-landed .mono-tip { display: none; }
+/* the caption rises while the first sheen (from ~1740, when the last stroke has settled) crosses the monogram */
+html.motion .pair { animation: pairIn 900ms var(--ease) 1700ms both; }
+html.motion .date:not(.is-split) { opacity: 0; }
+html.motion .date .ch { animation: fadeIn 450ms var(--ease) calc(1900ms + var(--i) * 40ms) both; }
+html.motion .dates { animation: rise 800ms var(--ease) 2250ms both; }
+html.motion .cta { animation: ctaIn 800ms var(--ease) 2300ms both; }
+html.motion .cta-glow { animation: ctaBreathe 3200ms ease-in-out 3100ms infinite alternate; }
+/* L1. untouched for 4s: the pill and the monogram's ring pulse a little brighter, once every 3s (main.js sweeps the
+   foil across the strokes in the same beat) */
+html.motion .cover.is-idle .cta::after, html.motion .cover.is-idle .mono-pulse { animation: idlePulse 3000ms ease-in-out infinite; }
+html.motion:not(.is-open) .mono-ripple { animation: ripple 3200ms linear 2400ms infinite; }
+/* J. the photograph rises out of the green as the ring draws and settles slowly (1.06 -> 1, 2.4s). A photograph
+   that arrives late cross-fades over its own placeholder instead of popping. On the tap it leans in (1 -> 1.04)
+   and goes with the first screen, gone before the invitation words reach it. */
+html.motion .shot { animation: shotIn 1900ms cubic-bezier(.33, 0, .2, 1) 60ms both, shotSettle 2400ms cubic-bezier(.2, .55, .25, 1) both; }
+html.motion .shot img { transition: opacity 700ms var(--ease); }
+html.motion .shot img:not(.is-loaded) { opacity: 0; }
+html.motion.is-open .cover-shot { animation: shotOut 950ms cubic-bezier(.4, 0, .3, 1) 140ms both; }
+/* H4.1 the card frame: while the ring draws, only a tiny ◇ sets in each corner (300) and its two curls unwind
+   from it out to the corner's notch (420-1180), with no straight line anywhere (L-brackets drawn first read as a
+   camera viewfinder). Once the ring has closed (1300), the lines leave each notch and corner and grow along the
+   edges to meet at the midpoints by about 2100. On the tap it opens outwards a little and fades with the shockwave. */
+html.motion .card .ln, html.motion .card .cu { stroke-dasharray: 1 2; }
+html.motion .card .dia { animation: gem 560ms var(--ease) 300ms both; }
+html.motion .card .cu { animation: drawBack 760ms var(--ease) 420ms both; }
+html.motion .card .ln { animation: draw 280ms cubic-bezier(.5, 0, .9, .6) 1300ms both; }
+html.motion .card .cl { animation: growX 540ms var(--ease) 1560ms both; }
+html.motion .card :is(.l1, .l2, .r1, .r2) { animation-name: growY; }
+html.motion.is-open .card { animation: cardOut 1100ms cubic-bezier(.15, .7, .35, 1) 120ms both; }
+/* H4.2 the rays arrive with the ring, sway ±6° (12s there and back), and fly home with the glow (main.js) */
+html.motion .cover .rays { animation: fadeIn 2200ms var(--ease) 700ms both; }
+html.motion .rays::before { animation: sway 6s ease-in-out infinite alternate; }
+html.motion .cover .rays::before { animation-name: swayTurn; }
+html.mono-off .rays::before { animation-play-state: paused; }
+/* weak networks: the words (and the label's ripple) wait for their typefaces (head script, at most until 3000) */
+html.motion.fonts-wait .pair, html.motion.fonts-wait .date .ch, html.motion.fonts-wait .dates,
+html.motion.fonts-wait .cta, html.motion.fonts-wait .cta-glow, html.motion.fonts-wait .mono-ripple { animation-play-state: paused; }
+
+/* D. invitation reveal, timed from .is-in (added 800ms after the tap) */
+html.motion .page .rv, html.motion .page .rv-blur, html.motion .weds,
+html.motion [data-split]:not(.is-split) { opacity: 0; }
+html.motion .wipe {
+  --p: 0%; /* a value even where @property is unknown, so the names stay hidden until their reveal */
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--p) - 56px), transparent var(--p));
+  mask-image: linear-gradient(90deg, #000 calc(var(--p) - 56px), transparent var(--p));
+}
+html.motion .wipe.is-wiped { -webkit-mask-image: none; mask-image: none; }
+/* no @property (Safari before 16.4, main.js adds no-prop): the front cannot travel, so the names rise in
+   instead of flashing and popping; the intro's tip spark (a custom-property turn) is left out */
+html.motion.no-prop .wipe { opacity: 0; -webkit-mask-image: none; mask-image: none; }
+html.no-prop .light { display: none; }
+html.motion.no-prop .mono-tip { animation: none; }
+html.motion .rule::before, html.motion .rule::after, html.motion .hair { transform: scaleX(0); }
+html.motion .rule i { opacity: 0; }
+html.motion .page .ch, html.motion .page .wd { opacity: 0; }
+
+/* the light's text is generated content (see main.js), clipped to a gold light */
+.light {
+  position: absolute; inset: 0; z-index: 1; padding: inherit; pointer-events: none; white-space: nowrap;
+  color: transparent; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat;
+  opacity: 0; -webkit-user-select: none; user-select: none;
+}
+.light::before { content: attr(data-light); }
+html.motion .is-in .wipe .light {
+  background-image: linear-gradient(90deg, rgba(243, 227, 188, 0) calc(var(--p) - 150px), rgba(243, 227, 188, .5) calc(var(--p) - 66px), rgba(243, 227, 188, 0) calc(var(--p) - 10px));
+}
+html.motion .wipe .light.is-sheen {
+  background-image: linear-gradient(110deg, rgba(243, 227, 188, 0) 41%, rgba(243, 227, 188, .95) 50%, rgba(243, 227, 188, 0) 59%);
+  background-size: 300% 100%; background-position: 100% 0;
+  filter: drop-shadow(0 0 5px rgba(243, 227, 188, .5));
+}
+
+/* .is-in lands 800ms after the tap, while the monogram is still easing into its slot (flight 350-1250),
+   so the words start to arrive under it as it settles. The details are in by about 2.6s after the tap;
+   the buttons follow as soon as they are on screen. */
+html.motion .is-in .families .ch { animation: fadeIn 500ms var(--ease) calc(var(--i) * 22ms) both; }
+html.motion .is-in .invite { animation: blurIn 700ms var(--ease) 200ms both; }
+html.motion .is-in .name { animation: wipe 900ms var(--ease) var(--d) both; }
+html.motion .is-in .name .light { animation: wipeLight 900ms var(--ease) var(--d) both; }
+html.motion .is-in .name:first-child { --d: 400ms; }
+html.motion .is-in .name:last-child { --d: 1000ms; }
+html.motion.no-prop .is-in .name { animation: rise 700ms var(--ease) var(--d) both; }
+html.motion .is-in .weds { animation: wedsIn 600ms var(--ease) 850ms both; }
+html.motion .invitation.is-in > .rule::before, html.motion .invitation.is-in > .rule::after { animation: grow 500ms var(--ease) 1200ms both; }
+html.motion .invitation.is-in > .rule i { animation: turn 600ms var(--ease) 1150ms both; }
+html.motion .invitation.is-in .when .sub { animation: rise 600ms var(--ease) 1300ms both; }
+html.motion .invitation.is-in .when .body { animation: rise 600ms var(--ease) 1420ms both; }
+html.motion .invitation.is-in > .hair { animation: grow 600ms var(--ease) 1540ms both; }
+html.motion .invitation.is-in .where .sub { animation: rise 600ms var(--ease) 1660ms both; }
+html.motion .invitation.is-in .where .body { animation: rise 600ms var(--ease) 1780ms both; }
+/* buttons: timed from .actions.is-in (at least 1700ms into the reveal, and 60% on screen) */
+html.motion .btn-draw .btn-label { opacity: 0; }
+html.motion .btn-draw::before { transform: scaleX(0); }
+html.motion .btn-draw::after { transform: scaleY(0); }
+html.motion .actions.is-in .btn-draw::before { animation: growX 380ms var(--ease) var(--bd) both; }
+html.motion .actions.is-in .btn-draw::after { animation: growY 280ms var(--ease) calc(var(--bd) + 330ms) both; }
+html.motion .actions.is-in .btn-draw .btn-label { animation: fadeIn 450ms var(--ease) calc(var(--bd) + 380ms) both; }
+.btn-draw[data-directions] { --bd: 0ms; }
+.btn-draw[data-save] { --bd: 100ms; }
+html.motion .actions.is-in + .gcal-slot .gcal { animation: rise 600ms var(--ease) 350ms both; }
+/* I2.2 and then the one quiet line down to the reception */
+html.motion .invitation > .actions.is-in ~ .jump { animation: rise 600ms var(--ease) 500ms both; }
+
+/* I1. the photographs arrive the way the names do: a band of light wipes them in over 900ms (the hairline frame
+   draws alongside), then a 7% Ken Burns drift over 12s and a little scroll parallax (--par, main.js). */
+html.motion .ph { --p: 0%; }
+html.motion .ph img {
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--p) - 56px), transparent var(--p));
+  mask-image: linear-gradient(90deg, #000 calc(var(--p) - 56px), transparent var(--p));
+}
+html.motion .ph.is-wiped img { -webkit-mask-image: none; mask-image: none; }
+html.motion .ph::after {
+  content: ''; position: absolute; inset: 0; z-index: 2; opacity: 0; pointer-events: none;
+  background-image: linear-gradient(90deg, rgba(243, 227, 188, 0) calc(var(--p) - 150px), rgba(243, 227, 188, .3) calc(var(--p) - 66px), rgba(243, 227, 188, 0) calc(var(--p) - 10px));
+}
+html.motion .ph-portrait::after { border-radius: inherit; }
+html.motion :is(.is-in, .is-peek) .ph { animation: wipe 900ms var(--ease) var(--pd, 150ms) both; }
+html.motion :is(.is-in, .is-peek) .ph::after { animation: wipeLight 900ms var(--ease) var(--pd, 150ms) both; }
+html.motion :is(.is-in, .is-peek) .ph img { animation: ken 12s ease-in-out calc(var(--pd, 150ms) + 900ms) infinite alternate; }
+html.motion :is(.is-in, .is-peek) .ph-arch .edge { animation: draw 1200ms var(--travel) 150ms both; }
+html.motion .ph-arch .edge { stroke-dasharray: 1 2; stroke-dashoffset: 1.01; }
+html.motion .ph-gem { opacity: 0; }
+html.motion :is(.is-in, .is-peek) .ph-gem { animation: gem 560ms var(--ease) 900ms both; }
+/* no @property (Safari before 16.4): the front cannot travel, so the photograph simply fades in */
+html.motion.no-prop .ph img { -webkit-mask-image: none; mask-image: none; }
+html.motion.no-prop .ph { opacity: 0; }
+html.motion.no-prop :is(.is-in, .is-peek) .ph { animation: fadeIn 900ms var(--ease) var(--pd, 150ms) both; }
+html.no-prop .ph::after { display: none; }
+/* the closing backdrop is a whisper: it fades, it never wipes */
+html.motion .bk { opacity: 0; }
+html.motion :is(.is-in, .is-peek) .bk { animation: fadeIn 1800ms var(--ease) 150ms both; }
+
+html.motion :is(.is-in, .is-peek) .bk img { animation: ken 18s ease-in-out 900ms infinite alternate; }
+html.motion .is-off .ph img, html.motion .is-off .bk img { animation-play-state: paused; }
+.ph-portrait { --pd: 0ms; }
+
+/* E2. reception: the words are readable within about 900ms; the frame (decoration) draws alongside, starting
+   from the clasp once its scrolls have reached out (250) */
+html.motion .frame .edge { stroke-dasharray: 1 2; stroke-dashoffset: 1.01; }
+html.motion .reception:is(.is-in, .is-peek) .frame .edge { animation: draw 1400ms var(--travel) 250ms both; }
+/* the solid gold Directions button rises in whole (there is no hairline to draw), then one sheen crosses it;
+   the Google Calendar link and the live line follow it */
+html.motion .actions-rcp.is-in .btn-solid { animation: rise 640ms var(--ease) both; }
+html.motion .actions-rcp.is-in ~ .gcal { animation: rise 600ms var(--ease) 240ms both; }
+html.motion .actions-rcp.is-in ~ .count-line { animation: rise 600ms var(--ease) 400ms both; }
+html.motion .panel > .actions:not(.is-ready) .btn { pointer-events: none; }
+html.motion .reception:is(.is-in, .is-peek) .glint { animation: glint 800ms var(--ease) var(--gd, 1400ms) both; }
+html.motion .reception:is(.is-in, .is-peek) .also { animation: rise 600ms var(--ease) 150ms both; }
+html.motion .reception.is-in .title { animation: wipe 900ms var(--ease) 250ms both; }
+html.motion .reception.is-in .title .light { animation: wipeLight 900ms var(--ease) 250ms both; }
+html.motion.no-prop .reception.is-in .title { animation: rise 700ms var(--ease) 250ms both; }
+html.motion .reception.is-in .rule::before, html.motion .reception.is-in .rule::after { animation: grow 500ms var(--ease) 450ms both; }
+html.motion .reception.is-in .rule i { animation: turn 600ms var(--ease) 420ms both; }
+html.motion .reception.is-in .when .sub { animation: rise 600ms var(--ease) 500ms both; }
+html.motion .reception.is-in .when .body { animation: rise 600ms var(--ease) 560ms both; }
+html.motion .reception.is-in .hair { animation: grow 600ms var(--ease) 600ms both; }
+html.motion .reception.is-in .where .sub { animation: rise 600ms var(--ease) 640ms both; }
+html.motion .reception.is-in .where .body { animation: rise 600ms var(--ease) 700ms both; }
+
+/* E3. blessings */
+html.motion .host, html.motion .hosts .dot { opacity: 0; }
+html.motion .blessings.is-in .ch { animation: fadeIn 500ms var(--ease) calc(var(--i) * 18ms) both; }
+html.motion .blessings.is-in .host { animation: rise 600ms var(--ease) calc(150ms + var(--i) * 140ms) both; }
+html.motion .blessings.is-in .dot { animation: fadeIn 600ms var(--ease) calc(220ms + var(--i) * 140ms) both; }
+.host:nth-child(1), .dot:nth-child(2) { --i: 0; } .host:nth-child(3), .dot:nth-child(4) { --i: 1; } .host:nth-child(5) { --i: 2; }
+html.motion .blessings.is-in .wd { animation: rise 600ms var(--ease) calc(450ms + var(--i) * 70ms) both; }
+html.motion .blessings.is-in .btn-solid { animation: rise 600ms var(--ease) 700ms both; }
+html.motion .blessings.is-in .btn-line { animation: rise 600ms var(--ease) 780ms both; }
+html.motion .blessings.is-in .foot-mono { animation: rise 600ms var(--ease) 860ms both; }
+html.motion .blessings.is-in .foot-date { animation: rise 600ms var(--ease) 920ms both; }
+
+/* H4.4 ornaments draw from the centre outwards: the bud, its petals, then the scrolls and their dots */
+html.motion .orn path { stroke-dasharray: 1 2; stroke-dashoffset: 1.01; }
+html.motion .orn .dot { opacity: 0; }
+html.motion :is(.is-in, .is-peek) .orn .bud { animation: draw 650ms var(--ease) var(--od, 0ms) both; }
+html.motion :is(.is-in, .is-peek) .orn .petal { animation: draw 600ms var(--ease) calc(180ms + var(--od, 0ms)) both; }
+html.motion :is(.is-in, .is-peek) .orn .scroll { animation: draw 950ms var(--ease) calc(340ms + var(--od, 0ms)) both; }
+html.motion :is(.is-in, .is-peek) .orn .dot { animation: fadeIn 450ms var(--ease) calc(1150ms + var(--od, 0ms)) both; }
+
+/* H2 the next-page button: its circle draws, the chevron drops in, then it bobs gently */
+html.motion .next { opacity: 0; pointer-events: none; }
+html.motion .next circle { stroke-dasharray: 1.03 2; stroke-dashoffset: 1.03; }
+html.motion .next path { opacity: 0; }
+html.motion .next.is-in { opacity: 1; pointer-events: auto; }
+html.motion .next.is-in circle { animation: draw 1000ms var(--travel) both; }
+html.motion .next.is-in path { animation: chevIn 600ms var(--ease) 500ms both; }
+html.motion .next.is-in svg { animation: bob 1800ms ease-in-out 1100ms infinite alternate; }
+html.motion .next .next-label { opacity: 0; }
+html.motion .next.is-in .next-label { animation: rise 600ms var(--ease) 150ms both; }
+html.motion .next:focus-visible { opacity: 1; }
+html.motion .next:focus-visible circle { stroke-dashoffset: 0 !important; }
+html.motion .next:focus-visible path, html.motion .next:focus-visible .next-label { opacity: 1 !important; }
+
+/* K. the music toggle arrives after the landing, once the cover and its frame have gone: its circle draws from the
+   top, the disc and bars fade in; then, while the music plays, the bars sway gently (each at its own pace) */
+html.motion.is-landed .sound { animation: soundIn 700ms var(--ease) 650ms both; }
+html.motion .sound .snd-ring { stroke-dasharray: 1.03 2; }
+html.motion.is-landed .sound .snd-ring { animation: draw 1000ms var(--travel) 650ms both; }
+html.motion .snd-bars i { animation: soundSway 1300ms ease-in-out infinite alternate paused; }
+html.motion .snd-bars i:nth-child(2) { animation-duration: 950ms; animation-delay: -400ms; }
+html.motion .snd-bars i:nth-child(3) { animation-duration: 1500ms; animation-delay: -900ms; }
+html.motion .sound.is-on .snd-bars i { animation-play-state: running; }
+html.reduce-motion.is-landed .sound { animation: soundShow 200ms linear 220ms both; }
+html.motion.is-landed .dots { animation: soundIn 700ms var(--ease) 800ms both; }
+html.reduce-motion.is-landed .dots { animation: soundShow 200ms linear 220ms both; }
+html.reduce-motion .pdot i { transition: none; }
+html.reduce-motion .snd-bars i, .sound.is-still .snd-bars i { animation: none !important; }
+
+/* H4.6 the glow behind each heading blooms as its page reveals, then breathes (8s each way) */
+html.motion :is(.names, .blessings > .label)::before, html.motion .panel > .halo { opacity: 0; }
+html.motion .is-in .names::before, html.motion .blessings.is-in > .label::before, html.motion .is-in .panel > .halo {
+  animation: haloIn 1800ms var(--ease) var(--hd, 60ms) both, haloBreathe 8s ease-in-out calc(var(--hd, 60ms) + 1800ms) infinite alternate;
+}
+.names::before { --hd: 450ms; }
+html.motion .is-off .next svg, html.motion .is-off .names::before,
+html.motion .blessings.is-off > .label::before, html.motion .is-off .panel > .halo { animation-play-state: paused; }
+
+/* H4.7 the kasavu edge draws from the centre outwards, then one light runs along its band */
+html.motion .kasavu i { transform: scaleX(0); }
+html.motion .kasavu.is-in i { animation: grow 1600ms var(--travel) both; }
+html.motion .kasavu.is-in i + i { animation-delay: 120ms; }
+html.motion .kasavu.is-in i + i::after { animation: kvSheen 1900ms cubic-bezier(.45, 0, .35, 1) 1650ms both; }
+
+/* a focused control is always visible, whatever its reveal is still waiting for */
+html.motion .page :is(.rv, .btn):focus-visible { opacity: 1 !important; transform: none !important; }
+html.motion .btn-draw:focus-visible .btn-label { opacity: 1 !important; }
+html.motion .btn-draw:focus-visible::before, html.motion .btn-draw:focus-visible::after { transform: none !important; }
+
+.ch, .wd { display: inline; }
+.wd { display: inline-block; }
+.w { white-space: nowrap; }
+
+/* ---------- keyframes ---------- */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+@keyframes settle { from { opacity: .4; transform: scale(1.18); } to { opacity: 1; transform: none; } }
+@keyframes breathe { from { transform: scale(1); opacity: .85; } to { transform: scale(1.06); opacity: 1; } }
+@keyframes draw { from { stroke-dashoffset: 1.01; } to { stroke-dashoffset: 0; } }
+@keyframes brighten { from, 35% { stroke: var(--bright); } to { stroke: var(--gold); } }
+/* --tip animates on the main thread, in step with the stroke-dashoffset it rides */
+@keyframes tipSpin { from { --tip: 0deg; } to { --tip: 360deg; } }
+@keyframes tipFade { from { opacity: 0; } 6%, 86% { opacity: 1; } to { opacity: 0; } }
+@keyframes pairIn {
+  from { opacity: 0; transform: translateY(12px); filter: blur(6px); letter-spacing: .12em; }
+  to { opacity: 1; transform: none; filter: blur(0); letter-spacing: .02em; }
+}
+/* the pill rises in under the dates; its words never fade, only the glow round it breathes */
+@keyframes ctaIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes ctaBreathe { from { opacity: .5; } to { opacity: 1; } }
+@keyframes idlePulse { 0% { opacity: 0; } 22% { opacity: 1; } 55%, 100% { opacity: 0; } }
+@keyframes ripple {
+  0% { transform: scale(1); opacity: .5; animation-timing-function: cubic-bezier(.22, .61, .36, 1); }
+  68.75% { transform: scale(1.35); opacity: 0; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes blurIn { from { opacity: 0; transform: translateY(10px); filter: blur(8px); } to { opacity: 1; transform: none; filter: blur(0); } }
+/* the feathered front runs from before the left edge to past the right edge */
+@keyframes wipe { from { --p: 0%; } to { --p: calc(100% + 56px); } }
+@keyframes wipeLight { from { opacity: 1; } 80% { opacity: 1; } to { opacity: 0; } }
+@keyframes wedsIn { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes growX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes growY { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes turn { from { opacity: 0; transform: rotate(-45deg); } to { opacity: 1; transform: rotate(45deg); } }
+@keyframes btnSheen { from { transform: translateX(-110%); } to { transform: translateX(110%); } }
+/* upright at its peak (a '+' star, never an 'x'), struck just after the line reaches the corner */
+@keyframes glint {
+  0% { opacity: 0; transform: scale(.2) rotate(-12deg); }
+  25% { opacity: 1; transform: scale(1.15) rotate(0deg); }
+  100% { opacity: 0; transform: scale(.3) rotate(10deg); }
+}
+
+@keyframes cardOut { from { opacity: 1; transform: none; } to { opacity: 0; transform: scale(1.06); } }
+@keyframes shotIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes shotSettle { from { scale: 1.06; } to { scale: 1; } }
+@keyframes shotOut { from { opacity: 1; scale: 1; } to { opacity: 0; scale: 1.04; } }
+@keyframes gem { from { opacity: 0; transform: scale(.2) rotate(-90deg); } to { opacity: 1; transform: none; } }
+@keyframes sway { from { transform: rotate(-6deg); opacity: .05; } to { transform: rotate(6deg); opacity: .09; } }
+@keyframes swayTurn { from { transform: rotate(-6deg); } to { transform: rotate(6deg); } }
+/* a stroke drawn from its far end back to its start */
+@keyframes drawBack { from { stroke-dashoffset: -1.01; } to { stroke-dashoffset: 0; } }
+@keyframes bob { from { transform: none; } to { transform: translateY(6px); } }
+@keyframes chevIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+/* visibility is discrete: hidden (not tappable, not focusable) only until the fade begins */
+@keyframes soundIn { from { opacity: 0; visibility: hidden; transform: scale(.86); } to { opacity: 1; visibility: visible; transform: none; } }
+@keyframes soundShow { from { opacity: 0; visibility: hidden; } to { opacity: 1; visibility: visible; } }
+/* the sway rides on transform, so the muted state (scale) can flatten the bars wherever the sway has got to */
+@keyframes soundSway { from { transform: scaleY(.45); } to { transform: none; } }
+@keyframes haloIn { from { opacity: 0; transform: scale(.72); } to { opacity: .85; transform: none; } }
+@keyframes haloBreathe { from { opacity: .85; transform: none; } to { opacity: 1; transform: scale(1.07); } }
+@keyframes kvSheen { from { opacity: 1; transform: translateX(-100%); } to { opacity: 1; transform: translateX(420%); } }
+/* I1 the slow drift over a photograph: scale and translate are their own properties, so main.js can still
+   put the scroll parallax on transform without fighting this */
+@keyframes ken { from { scale: 1.05; translate: 0 0; } to { scale: 1.11; translate: -1.2% -1.7%; } }
+
+/* ---------- reduced motion: finished monogram, no pre-states, gentle cross-fades ---------- */
+html.reduce-motion .page { transition: opacity 200ms linear; }
+html.reduce-motion:not(.is-open) .page { opacity: 0; }
+html.reduce-motion .cover, html.reduce-motion .cover-shot { transition: opacity 200ms linear; }
+html.reduce-motion.is-open .cover, html.reduce-motion.is-open .cover-shot { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "athulraj-weds-aiswarya",
+  "version": "1.0.0",
+  "description": "Athulraj & Aiswarya Wedding Invitation Website",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["wedding", "invitation", "gsap", "css-animations", "canvas-particles"],
+  "author": "",
+  "license": "MIT"
+}

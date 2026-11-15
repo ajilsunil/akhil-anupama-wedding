@@ -1,0 +1,31 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Athulraj and Aiswarya//Wedding Invitation//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:athulraj-aiswarya-wedding-20261025@wedding-invitation
+DTSTAMP:20260914T000000Z
+DTSTART:20261025T023000Z
+DTEND:20261025T040000Z
+SUMMARY:Athulraj & Aiswarya's Wedding
+LOCATION:Chettiyedath Mahavishnu Temple\, Vaka\, Thrissur
+DESCRIPTION:Together with our families\, we cordially invite you to the wed
+ ding of Athulraj & Aiswarya.\nWedding time: 8:00 AM – 9:30 AM (India Sta
+ ndard Time).
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+UID:athulraj-aiswarya-reception-20261101@wedding-invitation
+DTSTAMP:20260914T000000Z
+DTSTART:20261101T053000Z
+DTEND:20261101T083000Z
+SUMMARY:Athulraj & Aiswarya's Wedding Reception
+LOCATION:Groom’s residence\, Ezhilode\, Kannur
+DESCRIPTION:Wedding reception of Athulraj & Aiswarya.\n11 am onwards (India
+  Standard Time).
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR
