@@ -32,7 +32,7 @@ function foldLine(line) {
 // The two events on the card: the wedding at the temple and the reception at the groom's residence.
 export const EVENTS = Object.freeze({
   wedding: {
-    uid: 'athulraj-anupama-wedding-20261025@wedding-invitation',
+    uid: 'athulraj-anupama-wedding-20270110@wedding-invitation',
     summary: `${wedding.groom} & ${wedding.bride}'s Wedding`,
     start: wedding.start,
     end: wedding.end,
@@ -40,7 +40,7 @@ export const EVENTS = Object.freeze({
     description: `${wedding.intro}, ${wedding.inviteLine} ${wedding.groom} & ${wedding.bride}.\nWedding time: ${wedding.time} (India Standard Time).`,
   },
   reception: {
-    uid: 'athulraj-anupama-reception-20261101@wedding-invitation',
+    uid: 'athulraj-anupama-reception-20271101@wedding-invitation',
     summary: `${wedding.groom} & ${wedding.bride}'s Wedding Reception`,
     start: wedding.reception.start,
     end: wedding.reception.end,
