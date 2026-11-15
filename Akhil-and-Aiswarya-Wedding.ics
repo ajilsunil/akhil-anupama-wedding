@@ -17,10 +17,10 @@ STATUS:CONFIRMED
 TRANSP:OPAQUE
 END:VEVENT
 BEGIN:VEVENT
-UID:akhil-anupama-reception-20261101@wedding-invitation
-DTSTAMP:20260914T000000Z
-DTSTART:20261101T053000Z
-DTEND:20261101T083000Z
+UID:akhil-anupama-reception-20270110@wedding-invitation
+DTSTAMP:20270110T000000Z
+DTSTART:20270110T053000Z
+DTEND:20270110T083000Z
 SUMMARY:Akhil & Anupama's Wedding Reception
 LOCATION:Groom’s residence\, V Star Hall, Pezhumpara\, Palakkad
 DESCRIPTION:Wedding reception of Akhil & Anupama.\n11 am onwards (India
