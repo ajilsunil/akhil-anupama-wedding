@@ -17,9 +17,9 @@ export const wedding = Object.freeze({
   dayAfter: '2027-01-26T00:00:00+05:30',
   timeZone: 'Asia/Kolkata',
   time: '9:30 AM – 10:30 AM',
-  venue: 'Mahavishnu Temple',
-  venuePlace: 'Vytila, Eranakulam',
-  mapsUrl: 'https://maps.app.goo.gl/dCGv4ZSRUzet321XA',
+  venue: 'SDKY Auditorium',
+  venuePlace: 'Eroor, Eranakulam',
+  mapsUrl: 'https://maps.app.goo.gl/ZLvNQFZt3FMh2QEr5',
   reception: Object.freeze({
     date: '11 January 2027',
     weekday: 'Monday',
