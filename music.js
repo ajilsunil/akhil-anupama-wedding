@@ -1,4 +1,4 @@
-// A & A background music (DESIGN.md K). One <audio> element, made at load with preload="none" and the best source
+﻿// A & A background music (DESIGN.md K). One <audio> element, made at load with preload="none" and the best source
 // the browser can play (AAC in an .m4a first, then .mp3), looping. Nothing sounds before the guest's tap on the cover:
 // main.js calls start() synchronously inside that tap's handler, so iOS Safari counts play() as the guest's own
 // gesture. It plays from silence and fades up to LEVEL; where the element's volume is read-only (iOS) it simply plays.
@@ -39,7 +39,7 @@ export function initMusic({ reducedMotion = false } = {}) {
   a.addEventListener('error', failed);
   // paused from outside (a headset unplugged, the phone's media controls): the toggle follows, nothing is saved
   a.addEventListener('pause', () => { if (want && live && !document.hidden) { want = false; live = false; reflect(); } });
-  try { navigator.mediaSession && (navigator.mediaSession.metadata = new MediaMetadata({ title: 'Athulraj & Aiswarya' })); } catch { /* optional */ }
+  try { navigator.mediaSession && (navigator.mediaSession.metadata = new MediaMetadata({ title: 'Akhil & Anupama' })); } catch { /* optional */ }
 
   if (btn) {
     btn.hidden = false;
@@ -212,3 +212,5 @@ function tuck() {
   addEventListener('resize', ask, { passive: true });
   check();
 }
+
+

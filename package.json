@@ -1,7 +1,7 @@
-{
-  "name": "athulraj-weds-aiswarya",
+﻿{
+  "name": "athulraj-weds-anupama",
   "version": "1.0.0",
-  "description": "Athulraj & Aiswarya Wedding Invitation Website",
+  "description": "Akhil & Anupama Wedding Invitation Website",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -10,3 +10,6 @@
   "author": "",
   "license": "MIT"
 }
+
+
+

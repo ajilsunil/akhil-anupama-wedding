@@ -1,4 +1,4 @@
-// A & A choreography (DESIGN.md A-G). One particles instance drives both canvases: dust (z 1), effects (z 30).
+﻿// A & A choreography (DESIGN.md A-G). One particles instance drives both canvases: dust (z 1), effects (z 30).
 import { wedding } from './src/data/wedding.js';
 import { getCountdown, getGoogleCalendarUrl, getMapsUrl } from './src/lib/wedding.mjs';
 
@@ -333,7 +333,7 @@ function revealInvitation() {
         { duration: 1100, delay: i * 160, easing: 'cubic-bezier(.45,0,.35,1)', fill: 'backwards' });
     });
   };
-  // timed from .is-in (styles.css): Aiswarya's wipe ends at 1900
+  // timed from .is-in (styles.css): Anupama's wipe ends at 1900
   later(1950, () => { sheenNames(); setInterval(sheenNames, 9000); });
   // L3. the next prompt comes with the page (it fits the first view now), as the details finish rising
   later(1700, () => nextIn(inv));
@@ -972,3 +972,4 @@ try { init(); } catch (err) {
   console.warn('invitation choreography disabled:', err);
   root.classList.remove('js', 'motion', 'reduce-motion', 'is-open', 'is-landed');
 }
+

@@ -1,4 +1,4 @@
-import { wedding } from '../data/wedding.js';
+﻿import { wedding } from '../data/wedding.js';
 
 export function getCountdown(now = new Date()) {
   const current = Number(now);
@@ -32,7 +32,7 @@ function foldLine(line) {
 // The two events on the card: the wedding at the temple and the reception at the groom's residence.
 export const EVENTS = Object.freeze({
   wedding: {
-    uid: 'athulraj-aiswarya-wedding-20261025@wedding-invitation',
+    uid: 'athulraj-anupama-wedding-20261025@wedding-invitation',
     summary: `${wedding.groom} & ${wedding.bride}'s Wedding`,
     start: wedding.start,
     end: wedding.end,
@@ -40,7 +40,7 @@ export const EVENTS = Object.freeze({
     description: `${wedding.intro}, ${wedding.inviteLine} ${wedding.groom} & ${wedding.bride}.\nWedding time: ${wedding.time} (India Standard Time).`,
   },
   reception: {
-    uid: 'athulraj-aiswarya-reception-20261101@wedding-invitation',
+    uid: 'athulraj-anupama-reception-20261101@wedding-invitation',
     summary: `${wedding.groom} & ${wedding.bride}'s Wedding Reception`,
     start: wedding.reception.start,
     end: wedding.reception.end,
@@ -61,7 +61,7 @@ const vevent = (event, now) => [
 
 export function createCalendarEvent(now = new Date()) {
   return [
-    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Athulraj and Aiswarya//Wedding Invitation//EN',
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Akhil and Anupama//Wedding Invitation//EN',
     'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
     ...vevent(EVENTS.wedding, now),
     ...vevent(EVENTS.reception, now),
@@ -84,3 +84,6 @@ export function getGoogleCalendarUrl(which = 'wedding') {
 export function getMapsUrl() {
   return wedding.mapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${wedding.venue}, ${wedding.venuePlace}`)}`;
 }
+
+
+

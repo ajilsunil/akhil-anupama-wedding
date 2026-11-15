@@ -1,6 +1,6 @@
-# Athulraj & Aiswarya | Wedding Invitation
+﻿# Akhil & Anupama | Wedding Invitation
 
-An exact, faithful, high-craft reproduction of the wedding invitation website [athulraj-weds-aiswarya.netlify.app](https://athulraj-weds-aiswarya.netlify.app/).
+An exact, faithful, high-craft reproduction of the wedding invitation website [athulraj-weds-anupama.netlify.app](https://athulraj-weds-anupama.netlify.app/).
 
 ## Features & Craftsmanship
 
@@ -14,7 +14,7 @@ An exact, faithful, high-craft reproduction of the wedding invitation website [a
    - Triggered on button click, monogram click, scroll down, or swipe up.
    - Expanding radial shockwave and golden bloom flash.
    - Monogram glides and scales smoothly to anchor the header.
-   - Split-character typography animations reveal "Athulraj weds Aiswarya", "Together with our families", dates, and venues.
+   - Split-character typography animations reveal "Akhil weds Anupama", "Together with our families", dates, and venues.
    - Drawn hairline action buttons with shimmer sheens ("Directions", "Save the date", "Add to Google Calendar").
 
 3. **Background Music**
@@ -36,7 +36,7 @@ An exact, faithful, high-craft reproduction of the wedding invitation website [a
 ├── particles.js                         # Canvas particle system (gold dust, glints, jasmine petals)
 ├── touch.js                             # Interactive touch sparkles and golden trail rings
 ├── music.js                             # Audio controller with smooth fade-in/out and storage memory
-├── Athulraj-and-Aiswarya-Wedding.ics   # Calendar event file
+├── Akhil-and-Anupama-Wedding.ics   # Calendar event file
 ├── package.json                         # Project metadata and npm start script
 ├── server.js                            # Lightweight Node.js local development server
 ├── audio/                               # Soundtrack files (.m4a, .mp3)
@@ -59,3 +59,6 @@ node server.js
 ```
 
 Then visit [http://localhost:8080](http://localhost:8080) on your computer, or access it from your phone on the same Wi-Fi using your local IP link (e.g. `http://192.168.30.102:8080`).
+
+
+
