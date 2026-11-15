@@ -3,7 +3,7 @@ export const wedding = Object.freeze({
   groom: 'Akhil',
   bride: 'Anupama',
   title: 'Akhil & Anupama | Wedding Invitation',
-  description: 'Together with our families, we cordially invite you to the wedding of Akhil & Anupama on Sunday, 10 January 2027, at Chettiyedath Mahavishnu Temple, Vaka, Thrissur.',
+  description: 'Together with our families, we cordially invite you to the wedding of Akhil & Anupama on Sunday, 10 January 2027, at SDKY Auditorium, Eroor, Eranakulam.',
   intro: 'Together with our families',
   inviteLine: 'we cordially invite you to the wedding of',
   tagline: 'Two hearts, one journey, blessed by love and family.',
@@ -31,7 +31,7 @@ export const wedding = Object.freeze({
     mapsUrl: 'https://maps.app.goo.gl/45b1RWQzbkS2QmEj6', // the groom's house
   }),
   hosts: Object.freeze({ label: 'With love & blessings', names: ['K.V Rajan', 'Raji P.', 'Amitharaj'] }),
-  shareText: 'Together with our families, we cordially invite you to the wedding of Akhil & Anupama on Sunday, 10 January 2027, 9:30 AM – 10:30 AM at Chettiyedath Mahavishnu Temple, Vaka, Thrissur. Reception on Monday, 11 January 2027, 12 pm onwards at the groom’s residence, V Star Hall, Pezhumpara, Palakkad.',
+  shareText: 'Together with our families, we cordially invite you to the wedding of Akhil & Anupama on Sunday, 10 January 2027, 9:30 AM – 10:30 AM at SDKY Auditorium, Eroor, Eranakulam. Reception on Monday, 11 January 2027, 12 pm onwards at the groom’s residence, V Star Hall, Pezhumpara, Palakkad.',
 });
 
 
