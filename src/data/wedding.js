@@ -21,7 +21,7 @@ export const wedding = Object.freeze({
   venuePlace: 'Vaka, Thrissur',
   mapsUrl: 'https://maps.app.goo.gl/LpzQTTtj5mBWZDhf8',
   reception: Object.freeze({
-    date: '1 November 2026',
+    date: '11 January 2027',
     weekday: 'Sunday',
     time: '11 am onwards',
     start: '2026-11-01T11:00:00+05:30',
@@ -31,7 +31,7 @@ export const wedding = Object.freeze({
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=12.087500%2C75.254201', // the groom's house
   }),
   hosts: Object.freeze({ label: 'With love & blessings', names: ['K.V Rajan', 'Raji P.', 'Amitharaj'] }),
-  shareText: 'Together with our families, we cordially invite you to the wedding of Akhil & Anupama on Sunday, 10 January 2027, 8:00 AM – 9:30 AM at Chettiyedath Mahavishnu Temple, Vaka, Thrissur. Reception on Sunday, 1 November 2026, 11 am onwards at the groom’s residence, Ezhilode, Kannur.',
+  shareText: 'Together with our families, we cordially invite you to the wedding of Akhil & Anupama on Sunday, 10 January 2027, 8:00 AM – 9:30 AM at Chettiyedath Mahavishnu Temple, Vaka, Thrissur. Reception on Sunday, 11 January 2027, 11 am onwards at the groom’s residence, Ezhilode, Kannur.',
 });
 
 

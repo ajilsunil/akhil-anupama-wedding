@@ -763,7 +763,7 @@ html.js:not(.is-open) .kasavu { visibility: hidden; }
 @media (max-width: 350px) {
   .panel { padding-left: 12px; padding-right: 12px; }
   .panel .sub { font-size: 20px; }
-  /* "Sunday, 1 November 2026" must stay on one line here: wrapped, its second line rises into the
+  /* "Sunday, 11 January 2027" must stay on one line here: wrapped, its second line rises into the
      clear window of the scrim and the measured contrast falls to 3.2:1 (capture.mjs catches it) */
   .panel .when .sub { font-size: 18px; }
   /* a 264px-wide panel crops a 9:16 photograph to a narrow slice, so the picture is zoomed about

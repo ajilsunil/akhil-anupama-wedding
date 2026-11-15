@@ -650,7 +650,7 @@ function setupNext() {
     if (performance.now() - (b.inAt || -1e9) < 350) return; // see L3 above: long enough to absorb a double tap, short enough never to swallow a seen one
     glide(b, b.closest('[data-section]')?.nextElementSibling, e);
   }));
-  // I2.2 the quiet "Reception on 1 November" line travels the same way (and stays a real anchor without JS)
+  // I2.2 the quiet "Reception on 11 January" line travels the same way (and stays a real anchor without JS)
   const jump = $('[data-jump]');
   jump?.addEventListener('click', e => {
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;

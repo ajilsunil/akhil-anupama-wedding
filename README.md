@@ -23,7 +23,7 @@ An exact, faithful, high-craft reproduction of the wedding invitation website [a
 
 4. **Multi-Section Scroll & Page Dots**
    - **Wedding Section**: 10 January 2027 at Chettiyedath Mahavishnu Temple, Vaka, Thrissur.
-   - **Reception Section**: 1 November 2026 at Groom's residence, Ezhilode, Kannur, featuring scrim photography window and direction links.
+   - **Reception Section**: 11 January 2027 at Groom's residence, Ezhilode, Kannur, featuring scrim photography window and direction links.
    - **Blessings & Closing**: Arched portrait of the couple with gold gem crest, host family names, "Shower blessings" petal animation effect, and "Share invitation".
    - **Kasavu Trim**: Kerala gold-woven set-mundu border framing the foot of the screen.
 
