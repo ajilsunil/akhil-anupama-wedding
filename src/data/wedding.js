@@ -23,9 +23,9 @@ export const wedding = Object.freeze({
   reception: Object.freeze({
     date: '11 January 2027',
     weekday: 'Monday',
-    time: '12 pm onwards',
+    time: '11:00 AM onwards',
     start: '2027-01-11T11:00:00+05:30',
-    end: '2027-01-11T14:00:00+05:30',
+    end: '2027-01-11T15:00:00+05:30',
     venue: 'Groom’s residence',
     place: 'V Star Hall, Pezhumpara, Palakkad',
     mapsUrl: 'https://maps.app.goo.gl/45b1RWQzbkS2QmEj6', // the groom's house
