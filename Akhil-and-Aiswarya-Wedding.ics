@@ -5,29 +5,24 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
 UID:akhil-anupama-wedding-20270110@wedding-invitation
-DTSTAMP:20270110T000000Z
-DTSTART:20270110T023000Z
-DTEND:20270110T040000Z
+DTSTAMP:20261115T173543Z
+DTSTART:20270110T040000Z
+DTEND:20270110T050000Z
 SUMMARY:Akhil & Anupama's Wedding
 LOCATION:SDKY Auditorium\, Eroor\, Eranakulam
-DESCRIPTION:Together with our families\, we cordially invite you to the wed
- ding of Akhil & Anupama.\nWedding time: 9:30 AM – 10:30 AM (India Sta
- ndard Time).
+DESCRIPTION:Together with our families\, we cordially invite you to the wedding of Akhil & Anupama.\nWedding time: 9:30 AM – 10:30 AM (India Standard Time).
 STATUS:CONFIRMED
 TRANSP:OPAQUE
 END:VEVENT
 BEGIN:VEVENT
-UID:akhil-anupama-reception-20270110@wedding-invitation
-DTSTAMP:20270110T000000Z
-DTSTART:20270110T053000Z
-DTEND:20270110T083000Z
+UID:akhil-anupama-reception-20270111@wedding-invitation
+DTSTAMP:20261115T173543Z
+DTSTART:20270111T053000Z
+DTEND:20270111T093000Z
 SUMMARY:Akhil & Anupama's Wedding Reception
 LOCATION:Groom’s residence\, V Star Hall, Pezhumpara\, Palakkad
-DESCRIPTION:Wedding reception of Akhil & Anupama.\n11 am onwards (India
-  Standard Time).
+DESCRIPTION:Wedding reception of Akhil & Anupama.\n11:00 AM to 3:00 PM (India Standard Time).
 STATUS:CONFIRMED
 TRANSP:OPAQUE
 END:VEVENT
 END:VCALENDAR
-
-
