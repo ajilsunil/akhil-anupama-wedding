@@ -1,4 +1,4 @@
-﻿// Content taken from the couple's printed invitation card (groom's side), 13 September 2026.
+﻿
 export const wedding = Object.freeze({
   groom: 'Akhil',
   bride: 'Anupama',
@@ -11,10 +11,10 @@ export const wedding = Object.freeze({
   gratefulLine: 'Forever grateful',
   date: '10 January 2027',
   weekday: 'Sunday',
-  start: '2026-10-25T08:00:00+05:30',
-  end: '2026-10-25T09:30:00+05:30',
-  dayStart: '2026-10-25T00:00:00+05:30',
-  dayAfter: '2026-10-26T00:00:00+05:30',
+  start: '2027-01-25T08:00:00+05:30',
+  end: '2027-01-25T09:30:00+05:30',
+  dayStart: '2027-01-25T00:00:00+05:30',
+  dayAfter: '2027-01-26T00:00:00+05:30',
   timeZone: 'Asia/Kolkata',
   time: '8:00 AM – 9:30 AM',
   venue: 'Chettiyedath Mahavishnu Temple',
@@ -22,10 +22,10 @@ export const wedding = Object.freeze({
   mapsUrl: 'https://maps.app.goo.gl/LpzQTTtj5mBWZDhf8',
   reception: Object.freeze({
     date: '11 January 2027',
-    weekday: 'Sunday',
-    time: '11 am onwards',
-    start: '2026-11-01T11:00:00+05:30',
-    end: '2026-11-01T14:00:00+05:30',
+    weekday: 'Monday',
+    time: '12 am onwards',
+    start: '2027-01-01T11:00:00+05:30',
+    end: '2027-01-01T14:00:00+05:30',
     venue: 'Groom’s residence',
     place: 'Ezhilode, Kannur',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=12.087500%2C75.254201', // the groom's house
