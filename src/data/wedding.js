@@ -3,13 +3,13 @@ export const wedding = Object.freeze({
   groom: 'Akhil',
   bride: 'Anupama',
   title: 'Akhil & Anupama | Wedding Invitation',
-  description: 'Together with our families, we cordially invite you to the wedding of Akhil & Anupama on Sunday, 25 October 2026, at Chettiyedath Mahavishnu Temple, Vaka, Thrissur.',
+  description: 'Together with our families, we cordially invite you to the wedding of Akhil & Anupama on Sunday, 10 January 2027, at Chettiyedath Mahavishnu Temple, Vaka, Thrissur.',
   intro: 'Together with our families',
   inviteLine: 'we cordially invite you to the wedding of',
   tagline: 'Two hearts, one journey, blessed by love and family.',
   journeyLine: 'A beautiful journey begins here',
   gratefulLine: 'Forever grateful',
-  date: '25 October 2026',
+  date: '10 January 2027',
   weekday: 'Sunday',
   start: '2026-10-25T08:00:00+05:30',
   end: '2026-10-25T09:30:00+05:30',
@@ -31,7 +31,7 @@ export const wedding = Object.freeze({
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=12.087500%2C75.254201', // the groom's house
   }),
   hosts: Object.freeze({ label: 'With love & blessings', names: ['K.V Rajan', 'Raji P.', 'Amitharaj'] }),
-  shareText: 'Together with our families, we cordially invite you to the wedding of Akhil & Anupama on Sunday, 25 October 2026, 8:00 AM – 9:30 AM at Chettiyedath Mahavishnu Temple, Vaka, Thrissur. Reception on Sunday, 1 November 2026, 11 am onwards at the groom’s residence, Ezhilode, Kannur.',
+  shareText: 'Together with our families, we cordially invite you to the wedding of Akhil & Anupama on Sunday, 10 January 2027, 8:00 AM – 9:30 AM at Chettiyedath Mahavishnu Temple, Vaka, Thrissur. Reception on Sunday, 1 November 2026, 11 am onwards at the groom’s residence, Ezhilode, Kannur.',
 });
 
 
